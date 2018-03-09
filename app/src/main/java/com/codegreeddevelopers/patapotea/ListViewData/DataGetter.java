@@ -21,7 +21,7 @@ public class DataGetter{
         try {
             this.item_type=object.getString("item_type");
             this.item_number=object.getString("item_number");
-            this.item_name=object.getString("item_number");
+            this.item_name=object.getString("item_name");
             this.dateFound=object.getString("dateFound");
             this.item_image=object.getString("item_image");
         }catch (JSONException e){
