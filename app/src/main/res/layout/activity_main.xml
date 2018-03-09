@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.codegreeddevelopers.patapotea.MainActivity">
+    <ListView
+        app:layout_constraintStart_toEndOf="@dimen/search_bar_height"
+        android:id="@+id/items_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:floatingSearch_searchBarMarginLeft="7dp"
+        app:floatingSearch_searchBarMarginTop="10dp"
+        app:floatingSearch_searchBarMarginRight="7dp"
+        app:floatingSearch_searchHint="Search Item"
+        app:floatingSearch_suggestionsListAnimDuration="250"
+        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_leftActionMode="showSearch"
+        app:floatingSearch_menu="@menu/main"
+        app:floatingSearch_close_search_on_keyboard_dismiss="true">
+
+    </com.arlib.floatingsearchview.FloatingSearchView>
+
+
+
+</android.support.constraint.ConstraintLayout>
