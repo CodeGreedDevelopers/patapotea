@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         httpClient.get("http://www.duma.co.ke/patapotea/items_data_getter.php", new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(MainActivity.this,responseString, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"failed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
