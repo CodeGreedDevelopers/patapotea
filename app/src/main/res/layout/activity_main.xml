@@ -8,27 +8,27 @@
     android:orientation="vertical"
     tools:context="com.codegreeddevelopers.patapotea.MainActivity">
     <ListView
-        app:layout_constraintStart_toEndOf="@dimen/search_bar_height"
         android:id="@+id/items_list"
+        android:divider="#00ffffff"
+        android:paddingTop="65dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
     <com.arlib.floatingsearchview.FloatingSearchView
         android:id="@+id/floating_search_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:floatingSearch_searchBarMarginLeft="7dp"
         app:floatingSearch_searchBarMarginTop="10dp"
         app:floatingSearch_searchBarMarginRight="7dp"
+        android:layout_weight="0.4"
         app:floatingSearch_searchHint="Search Item"
         app:floatingSearch_suggestionsListAnimDuration="250"
-        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_showSearchKey="true"
         app:floatingSearch_leftActionMode="showSearch"
         app:floatingSearch_menu="@menu/main"
         app:floatingSearch_close_search_on_keyboard_dismiss="true">
-
     </com.arlib.floatingsearchview.FloatingSearchView>
-
 
 
 </android.support.constraint.ConstraintLayout>

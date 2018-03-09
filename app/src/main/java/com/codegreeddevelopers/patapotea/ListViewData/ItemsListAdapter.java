@@ -49,7 +49,7 @@ public class ItemsListAdapter extends ArrayAdapter<DataGetter> {
         // Populate the data into the template view using the data object
         itemType.setText(list_item_data.item_type);
 
-        itemNumber.setText("Number: "+list_item_data.item_number);
+        itemNumber.setText(list_item_data.item_number);
 
         itemName.setText(list_item_data.item_name);
 
