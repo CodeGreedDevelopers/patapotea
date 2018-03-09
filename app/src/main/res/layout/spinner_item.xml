@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <customfonts.MyTextView_OpenSans_SemiBold
+        android:id="@+id/spinner_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:minWidth="240dp"
+        android:text="Hardik"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="10dp"
+        android:textIsSelectable="false" />
+
+</LinearLayout>
