@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="visible"
-        app:indicatorColor="#9bf99a"
-        app:indicatorName="BallPulseIndicator" />
+        app:indicatorColor="@color/colorPrimary"
+        app:indicatorName="BallPulseSyncIndicator"/>
 
 </android.support.v7.widget.FitWindowsFrameLayout>
