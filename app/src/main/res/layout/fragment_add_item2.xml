@@ -28,13 +28,17 @@
             android:id="@+id/founder_name"
             android:layout_width="297dp"
             android:layout_height="40dp"
+            android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="12dp"
             android:maxLines="1"
             android:hint="name of person who found the item"
+            android:singleLine="true"
             android:background="@drawable/spinner_background"
+            android:paddingRight="10dp"
             android:paddingLeft="10dp"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:paddingStart="10dp" />
 
         <customfonts.MyTextView_OpenSans_SemiBold
             android:layout_width="wrap_content"
@@ -44,7 +48,7 @@
             android:text="Founder Phone No:"
             android:textColor="#338df8"
             android:textSize="14sp"
-            />
+            android:layout_marginStart="30dp" />
 
         <customfonts.EditText_OpenSans_SemiBold
             android:id="@+id/founder_phone"
@@ -53,10 +57,14 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="12dp"
             android:maxLines="1"
+            android:singleLine="true"
             android:hint="phone no. of person who found the item"
             android:background="@drawable/spinner_background"
             android:paddingLeft="10dp"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:paddingEnd="10dp"
+            android:layout_marginStart="30dp"
+            android:paddingStart="10dp" />
 
         <customfonts.MyTextView_OpenSans_SemiBold
             android:layout_width="wrap_content"
@@ -66,7 +74,7 @@
             android:text="Founder ID (optional):"
             android:textColor="#338df8"
             android:textSize="14sp"
-            />
+            android:layout_marginStart="30dp" />
 
         <customfonts.EditText_OpenSans_SemiBold
             android:id="@+id/founder_id"
@@ -75,10 +83,14 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="12dp"
             android:maxLines="1"
+            android:singleLine="true"
             android:hint="patapotea's id of person who found the item"
             android:background="@drawable/spinner_background"
             android:paddingLeft="10dp"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:paddingEnd="10dp"
+            android:layout_marginStart="30dp"
+            android:paddingStart="10dp" />
 
     </LinearLayout>
 

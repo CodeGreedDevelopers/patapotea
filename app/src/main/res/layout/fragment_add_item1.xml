@@ -10,7 +10,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
         android:orientation="vertical">
 
 
@@ -22,7 +21,7 @@
             android:text="Item Type :"
             android:textColor="#338df8"
             android:textSize="14sp"
-            />
+            android:layout_marginStart="30dp" />
 
         <LinearLayout
             android:layout_width="297dp"
@@ -30,7 +29,8 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="14.3dp"
             android:background="@drawable/spinner_background"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginStart="30dp">
 
 
             <Spinner
@@ -52,7 +52,7 @@
             android:text="Item Number :"
             android:textColor="#338df8"
             android:textSize="14sp"
-            />
+            android:layout_marginStart="30dp" />
 
             <customfonts.EditText_OpenSans_SemiBold
                 android:id="@+id/item_number"
@@ -61,9 +61,14 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="12dp"
                 android:maxLines="1"
+                android:hint="e.g the ID No, passport No"
                 android:background="@drawable/spinner_background"
                 android:paddingLeft="10dp"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:singleLine="true"
+                android:layout_marginStart="30dp"
+                android:paddingStart="10dp"
+                tools:ignore="RtlSymmetry" />
 
 
 
@@ -76,7 +81,7 @@
             android:text="Item name:"
             android:textColor="#338df8"
             android:textSize="14sp"
-            />
+            android:layout_marginStart="30dp" />
 
         <customfonts.EditText_OpenSans_SemiBold
             android:id="@+id/item_name"
@@ -85,9 +90,14 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="12dp"
             android:maxLines="1"
+            android:hint="Name on the item e.g person'd name"
             android:background="@drawable/spinner_background"
+            android:paddingRight="10dp"
             android:paddingLeft="10dp"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:singleLine="true"
+            android:layout_marginStart="30dp"
+            android:paddingStart="10dp" />
 
     </LinearLayout>
 

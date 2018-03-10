@@ -1,11 +1,13 @@
 package com.codegreeddevelopers.patapotea;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +17,9 @@ import android.widget.Toast;
 import com.codegreeddevelopers.patapotea.R;
 
 import Adapter.Add_Item_PageAdapter;
+import Fragment.Fragment_Add_Item1;
+import Fragment.Fragment_Add_Item2;
+import Fragment.Fragment_Add_Item3;
 
 public class AddItemActivity extends AppCompatActivity {
 
@@ -27,10 +32,15 @@ public class AddItemActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private Context context = AddItemActivity.this;
 
+    SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+
+        // obtain an instance of the SharedPreferences class
+        preferences= getSharedPreferences("AddItem", MODE_PRIVATE);
 
         linear1 = findViewById(R.id.linear1);
         next = findViewById(R.id.next);
@@ -47,15 +57,16 @@ public class AddItemActivity extends AppCompatActivity {
         viewPager.setAdapter(add_item_pageAdpter);
         viewPager.setOffscreenPageLimit(3); // the number of "off screen" pages to keep loaded each side of the current page
 
-
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
 
             }
 
             @Override
             public void onPageSelected(int position) {
+
                 CURRENTPAGE = position;
                 setcompletedStates(CURRENTPAGE);
                 if (CURRENTPAGE == 0) {
@@ -63,6 +74,7 @@ public class AddItemActivity extends AppCompatActivity {
                 } else {
                     previous.setVisibility(View.VISIBLE);
                 }
+
             }
 
             @Override
@@ -70,6 +82,7 @@ public class AddItemActivity extends AppCompatActivity {
 
             }
         });
+
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,15 +103,60 @@ public class AddItemActivity extends AppCompatActivity {
     public void nextclick() {
 
         if (CURRENTPAGE < 2) {
-            CURRENTPAGE++;
-            viewPager.setCurrentItem(CURRENTPAGE);
-            setcompletedStates(CURRENTPAGE);
-            Log.e("CURRENTPAGE", CURRENTPAGE + "");
+            if (CURRENTPAGE==0){
+                //get the saved selected item from preference
+                String item_name=preferences.getString("item_name",null);
+                String item_number=preferences.getString("item_number",null);
+
+                //check if values of edit texts are empty
+                if (item_number.isEmpty()&&item_name.isEmpty()){
+                    Fragment_Add_Item1.ChangeBackgroundDrawable("item_number");
+                    Fragment_Add_Item1.ChangeBackgroundDrawable("item_name");
+                }else if (item_number.isEmpty()){
+                    Fragment_Add_Item1.ChangeBackgroundDrawable("item_number");
+                }else if (item_name.isEmpty()){
+                    Fragment_Add_Item1.ChangeBackgroundDrawable("item_name");
+                }else {
+                    Fragment_Add_Item1.ChangeBackgroundDrawable("");
+                    CURRENTPAGE++;
+                    viewPager.setCurrentItem(CURRENTPAGE);
+                    setcompletedStates(CURRENTPAGE);
+                    Log.e("CURRENTPAGE", CURRENTPAGE + "");
+
+                }
+            }else{
+                //get the saved selected item from preference
+                String founder_name=preferences.getString("founder_name",null);
+                String founder_phone=preferences.getString("founder_phone",null);
+                String founder_id=preferences.getString("founder_id",null);
+
+                //check if values of edit texts are empty
+                if (founder_phone.isEmpty()&&founder_name.isEmpty()&&founder_id.isEmpty()){
+                    Fragment_Add_Item2.ChangeBackgroundDrawable("founder_name");
+                    Fragment_Add_Item2.ChangeBackgroundDrawable("founder_phone");
+                    Fragment_Add_Item2.ChangeBackgroundDrawable("founder_id");
+                }else if (founder_phone.isEmpty()){
+                    Fragment_Add_Item2.ChangeBackgroundDrawable("founder_name");
+                }else if (founder_name.isEmpty()){
+                    Fragment_Add_Item2.ChangeBackgroundDrawable("founder_phone");
+                }else {
+                    Fragment_Add_Item2.ChangeBackgroundDrawable("");
+                    CURRENTPAGE++;
+                    viewPager.setCurrentItem(CURRENTPAGE);
+                    setcompletedStates(CURRENTPAGE);
+                    Log.e("CURRENTPAGE", CURRENTPAGE + "");
+
+                }
+
+            }
+
+
         }
         if (CURRENTPAGE != 2) {
             iv_done.setVisibility(View.GONE);
             iv_next.setVisibility(View.VISIBLE);
         } else {
+            Fragment_Add_Item3.GetItems(AddItemActivity.this);
             iv_done.setVisibility(View.VISIBLE);
             iv_next.setVisibility(View.GONE);
         }
