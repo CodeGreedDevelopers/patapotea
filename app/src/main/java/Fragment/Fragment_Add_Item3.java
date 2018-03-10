@@ -23,11 +23,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codegreeddevelopers.patapotea.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import cz.msebera.android.httpclient.Header;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -57,10 +65,11 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
         item_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openImageChooser();
+                check_permission();
 
             }
         });
+
 
 
 
@@ -76,6 +85,7 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
         founder_id = preferences.getString("founder_id", null);
 
         Toast.makeText(context, "Type: "+item_type+" Number: "+item_number+" Name: "+item_name+" Phone: "+founder_phone+" ID: "+founder_id, Toast.LENGTH_LONG).show();
+        UploadItems(context);
     }
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
@@ -114,6 +124,35 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
                 .setAspectRatio(1, 1)
                 .setCropMenuCropButtonTitle("Done")
                 .start(getContext(), this);
+    }
+    public static void UploadItems(final Context context){
+        RequestParams params = new RequestParams();
+
+        try {
+            params.put("item_image", new File(result));
+            params.put("item_name", item_name);
+            params.put("item_number", item_number);
+            params.put("item_type", item_type);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post("http://www.duma.com/patapotea/items_data_setter.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                Toast.makeText(context, "Success uploading...", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                Toast.makeText(context, "Error uploading...", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
     private void check_permission(){
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
