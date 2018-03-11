@@ -59,6 +59,10 @@
         <activity android:name=".UserProfileActivity">
 
         </activity>
+        <activity android:name=".CheckOut.CheckOutActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

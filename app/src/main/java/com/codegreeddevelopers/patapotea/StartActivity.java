@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
+
 public class StartActivity extends AppCompatActivity {
     LinearLayout get_pickup_point,get_user;
     SharedPreferences user_preferences;
@@ -44,10 +46,15 @@ public class StartActivity extends AppCompatActivity {
         get_pickup_point.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent=new Intent(StartActivity.this,SignInActivity.class);
-                intent.putExtra("current_user", "pickup_point");
-                startActivity(intent);
+                preference_email = user_preferences.getString("email", null);
+                if (preference_email!=null) {
+                    Intent intent = new Intent(StartActivity.this,PickupMain.class);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(StartActivity.this, SignInActivity.class);
+                    intent.putExtra("current_user", "pickup_point");
+                    startActivity(intent);
+                }
 
 
             }

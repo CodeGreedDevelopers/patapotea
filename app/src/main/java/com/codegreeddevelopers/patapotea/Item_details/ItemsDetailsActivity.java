@@ -243,7 +243,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
                                 .show();
                     }else{
                         new SweetAlertDialog(ItemsDetailsActivity.this,SweetAlertDialog.NORMAL_TYPE)
-                                .setContentText("Your Pick Up Pin is: \n"+jsonObject.get("item_pass"))
+                                .setContentText("Your Pick Up Pin is: \n"+jsonObject.get("confirm_code"))
                                 .show();
                     }
                 } catch (JSONException e) {
