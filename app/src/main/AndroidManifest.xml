@@ -33,7 +33,10 @@
         <activity
             android:name=".Item_details.ItemsDetailsActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".StartActivity">
+        <activity
+            android:name=".StartActivity"
+            android:theme="@style/FullScreenTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,6 +51,10 @@
         <activity android:name=".MapActivity.MapActivity">
 
         </activity>
+        <activity android:name=".SignInActivity"
+            android:theme="@style/FullScreenTheme"/>
+        <activity android:name=".SignUpActivity"
+            android:theme="@style/FullScreenTheme"/>
     </application>
 
 </manifest>
