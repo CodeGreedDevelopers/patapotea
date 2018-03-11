@@ -20,7 +20,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Fragment_Add_Item2 extends android.support.v4.app.Fragment {
     private View view;
-    SharedPreferences preferences;
+    SharedPreferences items_preferences;
     SharedPreferences.Editor editor;
 
     public static EditText_OpenSans_SemiBold founder_id,founder_name,founder_phone;
@@ -31,10 +31,10 @@ public class Fragment_Add_Item2 extends android.support.v4.app.Fragment {
         view = inflater.inflate(R.layout.fragment_add_item2, container, false);
 
         // obtain an instance of the SharedPreferences class
-        preferences= this.getActivity().getSharedPreferences("AddItem", MODE_PRIVATE);
+        items_preferences = this.getActivity().getSharedPreferences("AddItem", MODE_PRIVATE);
 
-        //set default values for preferences
-        editor=preferences.edit();
+        //set default values for items_preferences
+        editor= items_preferences.edit();
         editor.putString("founder_name","");
         editor.putString("founder_phone","");
         editor.putString("founder_id","");
@@ -59,8 +59,8 @@ public class Fragment_Add_Item2 extends android.support.v4.app.Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String current_founder_name=founder_name.getText().toString();
-                //update the details to preferences
-                editor=preferences.edit();
+                //update the details to items_preferences
+                editor= items_preferences.edit();
                 editor.putString("founder_name",current_founder_name);
                 editor.apply();
 
@@ -81,8 +81,8 @@ public class Fragment_Add_Item2 extends android.support.v4.app.Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String current_founder_phone=founder_phone.getText().toString();
-                //update the details to preferences
-                editor=preferences.edit();
+                //update the details to items_preferences
+                editor= items_preferences.edit();
                 editor.putString("founder_phone",current_founder_phone);
                 editor.apply();
 
@@ -103,8 +103,8 @@ public class Fragment_Add_Item2 extends android.support.v4.app.Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String current_founder_id=founder_id.getText().toString();
-                //update the details to preferences
-                editor=preferences.edit();
+                //update the details to items_preferences
+                editor= items_preferences.edit();
                 editor.putString("founder_id",current_founder_id);
                 editor.apply();
 

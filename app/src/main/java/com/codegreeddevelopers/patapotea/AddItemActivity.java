@@ -1,5 +1,6 @@
 package com.codegreeddevelopers.patapotea;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,13 @@ public class AddItemActivity extends AppCompatActivity {
         Add_Item_PageAdapter add_item_pageAdpter = new Add_Item_PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(add_item_pageAdpter);
         viewPager.setOffscreenPageLimit(3); // the number of "off screen" pages to keep loaded each side of the current page
+
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event){
+                return true;
+            }
+        });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -156,9 +165,15 @@ public class AddItemActivity extends AppCompatActivity {
             iv_done.setVisibility(View.GONE);
             iv_next.setVisibility(View.VISIBLE);
         } else {
-            Fragment_Add_Item3.GetItems(AddItemActivity.this);
+
             iv_done.setVisibility(View.VISIBLE);
             iv_next.setVisibility(View.GONE);
+            iv_done.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment_Add_Item3.GetItems(AddItemActivity.this);
+                }
+            });
         }
 
     }

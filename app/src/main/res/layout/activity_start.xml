@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bgimage">
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bgtrans">
+
+        <customfonts.MyTextView
+            android:id="@+id/signin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Proceed As :"
+            android:textSize="30sp"
+            android:textColor="#f8f8f9"
+            android:gravity="left"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            />
+
+
+
+
+        <customfonts.MyTextView
+            android:id="@+id/acc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Copyright &#169; 2018 Codegreed Developers"
+            android:textSize="14dp"
+            android:textColor="#c4c5c9"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_above="@id/signin"
+            android:paddingBottom="5dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/get_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:background="@drawable/roundedrect"
+            android:padding="16dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="140dp"
+
+            >
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="1dp">
+
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/rect1"
+                    />
+
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_user"
+                    android:paddingLeft="3dp"
+                    android:layout_gravity="center"
+                    />
+
+
+            </FrameLayout>
+
+            <customfonts.MyTextView
+                android:id="@+id/start_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User"
+                android:textSize="20dp"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/get_pickup_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:background="@drawable/roundedrect"
+            android:padding="16dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="240dp"
+
+            >
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="1dp">
+
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/rect1"
+                    />
+
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_pickup_point"
+                    android:paddingLeft="3dp"
+                    android:layout_gravity="center"
+                    />
+
+
+            </FrameLayout>
+
+            <customfonts.MyTextView
+                android:id="@+id/start_pickup_point"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PickUp Point"
+                android:textSize="20dp"
+                android:textColor="#fff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"/>
+
+        </LinearLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

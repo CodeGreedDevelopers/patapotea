@@ -8,11 +8,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.codegreeddevelopers.patapotea.R;
 
@@ -29,7 +27,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Fragment_Add_Item1 extends android.support.v4.app.Fragment {
     private View view;
-    SharedPreferences preferences;
+    SharedPreferences items_preferences;
     SharedPreferences.Editor editor;
 
     Spinner sp_item_type;
@@ -41,10 +39,10 @@ public class Fragment_Add_Item1 extends android.support.v4.app.Fragment {
         view = inflater.inflate(R.layout.fragment_add_item1, container, false);
 
         // obtain an instance of the SharedPreferences class
-        preferences= this.getActivity().getSharedPreferences("AddItem", MODE_PRIVATE);
+        items_preferences = this.getActivity().getSharedPreferences("AddItem", MODE_PRIVATE);
 
-        //set default values for preferences
-        editor=preferences.edit();
+        //set default values for items_preferences
+        editor= items_preferences.edit();
         editor.putString("selected_item","");
         editor.putString("item_number","");
         editor.putString("item_name","");
@@ -70,7 +68,7 @@ public class Fragment_Add_Item1 extends android.support.v4.app.Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selected_item=sp_item_type.getSelectedItem().toString();
                 //update the selected item to preference after an item is selected
-                editor=preferences.edit();
+                editor= items_preferences.edit();
                 editor.putString("item_type",selected_item);
                 editor.apply();
 
@@ -97,7 +95,7 @@ public class Fragment_Add_Item1 extends android.support.v4.app.Fragment {
             public void afterTextChanged(Editable s) {
                 String current_item_name=item_name.getText().toString();
                 //update the selected item to preference after an item is selected
-                editor=preferences.edit();
+                editor= items_preferences.edit();
                 editor.putString("item_name",current_item_name);
                 editor.apply();
 
@@ -119,7 +117,7 @@ public class Fragment_Add_Item1 extends android.support.v4.app.Fragment {
             public void afterTextChanged(Editable s) {
                 String current_item_number=item_number.getText().toString();
                 //update the selected item to preference after an item is selected
-                editor=preferences.edit();
+                editor= items_preferences.edit();
                 editor.putString("item_number",current_item_number);
                 editor.apply();
 
