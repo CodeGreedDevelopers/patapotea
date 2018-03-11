@@ -146,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.action_pickup) {
                     Intent intent=new Intent(MainActivity.this, MapActivity.class);
                     startActivity(intent);
+                }else if (id == R.id.action_setting) {
+                    Intent intent=new Intent(MainActivity.this, UserProfileActivity.class);
+                    startActivity(intent);
                 }
             }
         });
