@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codegreeddevelopers.patapotea.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -45,6 +47,21 @@ public class ItemsListAdapter extends ArrayAdapter<DataGetter> {
         TextView itemNumber = (TextView) convertView.findViewById(R.id.document_number);
         TextView itemName = (TextView) convertView.findViewById(R.id.document_name);
         TextView dateFound = (TextView) convertView.findViewById(R.id.found_date);
+        ImageView imageView=convertView.findViewById(R.id.item_image);
+
+        if (list_item_data.item_type.trim().equals("ATM Card")){
+            Picasso.with(getContext()).load(R.drawable.credit_card_icon).into(imageView);
+        }else if(list_item_data.item_type.trim().equals("Student ID")){
+            Picasso.with(getContext()).load(R.drawable.student_id_card).into(imageView);
+        }else if(list_item_data.item_type.trim().equals("Passport")){
+            Picasso.with(getContext()).load(R.drawable.passport_icon).into(imageView);
+        }else if (list_item_data.item_type.trim().equals("Visa Card")){
+            Picasso.with(getContext()).load(R.drawable.visa_card_icon).into(imageView);
+        }else{
+            Picasso.with(getContext()).load(R.drawable.national_card).into(imageView);
+        }
+
+
 
         // Populate the data into the template view using the data object
         itemType.setText(list_item_data.item_type);

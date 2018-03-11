@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import com.codegreeddevelopers.patapotea.Item_details.ItemsDetailsActivity;
 import com.codegreeddevelopers.patapotea.ListViewData.DataGetter;
 import com.codegreeddevelopers.patapotea.ListViewData.ItemsListAdapter;
 import com.codegreeddevelopers.patapotea.ListViewData.Suggestion;
+import com.codegreeddevelopers.patapotea.MapActivity.MapActivity;
 import com.gturedi.views.StatefulLayout;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -36,6 +38,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.msebera.android.httpclient.Header;
 import mehdi.sakout.dynamicbox.DynamicBox;
 
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     DynamicBox dynamicBox;
     StatefulLayout statefulLayout;
     List<Suggestion> suggestions_list;
-    SearchSuggestionsAdapter searchSuggestionsAdapter;
+    SweetAlertDialog searching_dialog;
     String myjsonData="",all_items="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
         //show the loading box
         View customView = getLayoutInflater().inflate(R.layout.loading_activity, items_List, false);
         dynamicBox.addCustomView(customView,"greenmonster");
+
+        //searching dialog box
+        searching_dialog= new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        searching_dialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        searching_dialog.setTitleText("Fetching Data...");
+        searching_dialog.setCancelable(false);
 
 
 
@@ -98,9 +107,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
                 mSearchView.hideProgress();
-                View customView = getLayoutInflater().inflate(R.layout.loading_activity, items_List, false);
-                dynamicBox.addCustomView(customView,"greenmonster");
-                dynamicBox.showCustomView("greenmonster");
                 search_data_online(searchSuggestion.getBody());
                 mSearchView.clearSearchFocus();
             }
@@ -108,9 +114,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSearchAction(String currentQuery) {
                 mSearchView.hideProgress();
-                View customView = getLayoutInflater().inflate(R.layout.loading_activity, items_List, false);
-                dynamicBox.addCustomView(customView,"greenmonster");
-                dynamicBox.showCustomView("greenmonster");
                 search_data_online(currentQuery);
             }
         });
@@ -123,12 +126,25 @@ public class MainActivity extends AppCompatActivity {
             public void onSearchTextChanged(String oldQuery, String newQuery) {
                 if (!oldQuery.equals("") && newQuery.equals("")) {
                     mSearchView.clearSuggestions();
+                    mSearchView.hideProgress();
                 }else if(myjsonData.isEmpty()){
                     mSearchView.clearSuggestions();
                 } else {
                     mSearchView.showProgress();
                     setting_up_search_suggerstion(all_items,newQuery);
                     mSearchView.swapSuggestions(suggestions_list);
+                }
+            }
+        });
+
+        //menu items click listener
+        mSearchView.setOnMenuItemClickListener(new FloatingSearchView.OnMenuItemClickListener() {
+            @Override
+            public void onActionMenuItemSelected(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.action_pickup) {
+                    Intent intent=new Intent(MainActivity.this, MapActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -145,7 +161,18 @@ public class MainActivity extends AppCompatActivity {
         httpClient.get("http://www.duma.co.ke/patapotea/items_data_getter.php", new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(MainActivity.this,"failed", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"failed", Toast.LENGTH_SHORT).show();
+                dynamicBox.showExceptionLayout();
+                dynamicBox.setClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (conection_status()){
+                            get_list_items_online();
+                        }else{
+                            dynamicBox.showExceptionLayout();
+                        }
+                    }
+                });
             }
 
             @Override
@@ -171,11 +198,13 @@ public class MainActivity extends AppCompatActivity {
         items_List.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 try {
                     JSONArray clicked_array=new JSONArray(myjsonData);
                     JSONObject object=clicked_array.getJSONObject(position);
-                    Toast.makeText(MainActivity.this, "You clicked"+object.get("item_number"), Toast.LENGTH_SHORT).show();
+
                     Intent intent=new Intent(MainActivity.this, ItemsDetailsActivity.class);
+                    intent.putExtra("item_id",object.get("id").toString());
                     startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -186,19 +215,21 @@ public class MainActivity extends AppCompatActivity {
     }
     //searching data online
     public void search_data_online(String query){
-        dynamicBox.showCustomView("greenmonster");
+        searching_dialog.show();
         AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
         RequestParams params=new RequestParams();
         params.put("query",query);
         asyncHttpClient.post("http://www.duma.co.ke/patapotea/search_items.php", params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                show_no_content();
+                searching_dialog.show();
+                Toast.makeText(MainActivity.this, "An Error Occurred", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 //Toast.makeText(MainActivity.this,responseString, Toast.LENGTH_SHORT).show();
+                searching_dialog.dismiss();
                 if (responseString.isEmpty()){
                     show_no_content();
                 }else{

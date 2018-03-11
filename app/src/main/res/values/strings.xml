@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">PataPotea</string>
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCDn3j_1ACurLAIrWCCRLEvlSsOHO3T2MY</string>
+    <string name="google_maps_key"> AIzaSyA54BOn5G2dwMtqYMlp5yN88lm_5YbTUhA </string>
 </resources>
