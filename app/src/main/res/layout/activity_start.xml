@@ -11,17 +11,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bgtrans">
+        android:background="@drawable/transparentimage">
 
         <customfonts.MyTextView
             android:id="@+id/signin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Proceed As :"
-            android:textSize="30sp"
-            android:textColor="#f8f8f9"
+            android:text="proceed as"
+            android:textSize="22sp"
+            android:textColor="#ADCCE2"
             android:gravity="left"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="25dp"
             android:layout_marginStart="10dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="30dp"

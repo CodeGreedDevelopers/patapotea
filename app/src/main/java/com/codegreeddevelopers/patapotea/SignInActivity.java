@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -64,7 +65,6 @@ public class SignInActivity extends AppCompatActivity {
         //show signup for normal users
         if (current_user.equals("normal_user")){
             sign_up.setVisibility(View.VISIBLE);
-
         }
 
         sign_up.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class SignInActivity extends AppCompatActivity {
     public void GetUserInfo(){
         pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#f158b940"));
-        pDialog.setTitleText("Creating Account");
+        pDialog.setTitleText("Signing In...");
         pDialog.setCancelable(false);
         pDialog.show();
         email_info = email.getText().toString().trim();
@@ -93,6 +93,7 @@ public class SignInActivity extends AppCompatActivity {
 
         params.put("email", email);
         params.put("password", password);
+        params.put("user_type",current_user);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.post("http://www.duma.co.ke/patapotea/check_user.php", params, new TextHttpResponseHandler() {
@@ -109,8 +110,7 @@ public class SignInActivity extends AppCompatActivity {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 GetUserInfo();
-
-
+                                sweetAlertDialog.dismiss();
                             }
                         })
                         .show();
@@ -125,10 +125,16 @@ public class SignInActivity extends AppCompatActivity {
                     editor= user_preferences.edit();
                     editor.putString("email",email);
                     editor.apply();
+                    if (current_user.equals("normal_user")){
+                        Intent it = new Intent(SignInActivity.this,MainActivity.class);
+                        startActivity(it);
+                        finish();
+                    }else{
+                        Intent it = new Intent(SignInActivity.this,PickupMain.class);
+                        startActivity(it);
+                        finish();
+                    }
 
-                    Intent it = new Intent(SignInActivity.this,MainActivity.class);
-                    startActivity(it);
-                    finish();
 
                 }else {
                     new SweetAlertDialog(SignInActivity.this, SweetAlertDialog.ERROR_TYPE)

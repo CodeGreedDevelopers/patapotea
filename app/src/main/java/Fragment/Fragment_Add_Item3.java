@@ -24,7 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.codegreeddevelopers.patapotea.PickPointMainActivity;
+import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
 import com.codegreeddevelopers.patapotea.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -160,7 +160,7 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 //clear the data from items_preference and redirect to main activity
                                 items_preferences.edit().clear().apply();
-                                Intent intent = new Intent(context, PickPointMainActivity.class);
+                                Intent intent = new Intent(context, PickupMain.class);
                                 context.startActivity(intent);
                                 onFinish();
 

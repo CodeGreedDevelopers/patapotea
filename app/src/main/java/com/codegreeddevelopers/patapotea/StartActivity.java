@@ -44,6 +44,7 @@ public class StartActivity extends AppCompatActivity {
         get_pickup_point.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent=new Intent(StartActivity.this,SignInActivity.class);
                 intent.putExtra("current_user", "pickup_point");
                 startActivity(intent);
