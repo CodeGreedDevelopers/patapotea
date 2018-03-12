@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.InputType;
 import android.view.View;
@@ -43,8 +44,9 @@ public class UserProfileActivity extends AppCompatActivity {
     CircleImageView profile;
     ImageView ic_edt_name,ic_edt_phone,ic_edt_email;
     SweetAlertDialog pDialog;
-    SharedPreferences user_preferences;
+    SharedPreferences user_preferences,pickup_point_preferences;
     SharedPreferences.Editor editor;
+    CardView logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
         // obtain an instance of the SharedPreferences class
         user_preferences = this.getSharedPreferences("UserInfo", MODE_PRIVATE);
+        pickup_point_preferences = this.getSharedPreferences("PickUpPointInfo", MODE_PRIVATE);
 
         preference_email = user_preferences.getString("email", null);
 
@@ -66,6 +69,7 @@ public class UserProfileActivity extends AppCompatActivity {
         ic_edt_name=findViewById(R.id.ic_edt_name);
         ic_edt_phone=findViewById(R.id.ic_edt_phone);
         ic_edt_email=findViewById(R.id.ic_edt_email);
+        logout=findViewById(R.id.logout);
 
         ic_edt_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +89,12 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ChangePhoneDialog();
 
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogOut();
             }
         });
     }
@@ -141,8 +151,6 @@ public class UserProfileActivity extends AppCompatActivity {
                         display_name=info.getString("name");
                         display_email=info.getString("email");
                         display_phone=info.getString("phone");
-
-                        Toast.makeText(UserProfileActivity.this, "Name: "+display_name, Toast.LENGTH_SHORT).show();
 
                         DisplayUserInfo();
 
@@ -501,6 +509,17 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public void LogOut(){
+        //clear the data from items_preference and redirect to main activity
+        user_preferences.edit().clear().apply();
+        RestartApp();
+    }
+
+    public void RestartApp(){
+        Intent intent=getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
 

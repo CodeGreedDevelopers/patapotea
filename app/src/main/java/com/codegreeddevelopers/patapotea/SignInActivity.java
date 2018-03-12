@@ -17,16 +17,20 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.msebera.android.httpclient.Header;
 
 public class SignInActivity extends AppCompatActivity {
-    String current_user;
+    String current_user,db_phone,db_id,db_name,db_response;
     LinearLayout signinback;
     TextView sign_up,email,password,signin_btn;
-    String email_info,password_info,preference_email;
+    String email_info,password_info,preference_email,db_email;
     SweetAlertDialog pDialog;
-    SharedPreferences user_preferences;
+    SharedPreferences user_preferences,pickup_point_preferences;
     SharedPreferences.Editor editor;
 
     @Override
@@ -34,6 +38,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // obtain an instance of the SharedPreferences class
         user_preferences = this.getSharedPreferences("UserInfo", MODE_PRIVATE);
+        pickup_point_preferences = this.getSharedPreferences("PickUpPointInfo", MODE_PRIVATE);
 
         setContentView(R.layout.activity_sign_in);
 
@@ -120,30 +125,59 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 pDialog.dismissWithAnimation();
-                if (responseString.trim().equals("true")){
-                    //save the email to preference
-                    editor= user_preferences.edit();
-                    editor.putString("email",email);
-                    editor.apply();
-                    if (current_user.equals("normal_user")){
-                        Intent it = new Intent(SignInActivity.this,MainActivity.class);
-                        startActivity(it);
-                        finish();
-                    }else{
-                        Intent it = new Intent(SignInActivity.this,PickupMain.class);
-                        startActivity(it);
-                        finish();
+
+
+                try {
+                    JSONArray user_info=new JSONArray(responseString);
+
+                    JSONObject info=user_info.getJSONObject(1);
+                    JSONObject r_info=user_info.getJSONObject(0);
+                    try {
+                        if (current_user.equals("normal_user")){
+                            db_phone=info.getString("phone");
+                            db_name=info.getString("name");
+
+                        }else{
+                            db_id=info.getString("id");
+
+                        }
+                        db_email=info.getString("email");
+                        db_response=r_info.getString("response");
+
+                        if (db_response.equals("false")){
+                            new SweetAlertDialog(SignInActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Error!")
+                                    .setContentText("Invalid username or password.")
+                                    .setConfirmText("Ok")
+                                    .showCancelButton(false)
+                                    .show();
+                        }else {
+                            if (current_user.equals("normal_user")){
+                                editor= user_preferences.edit();
+                                editor.putString("email",db_email);
+                                editor.apply();
+                               Intent it = new Intent(SignInActivity.this,MainActivity.class);
+                               startActivity(it);
+                               finish();
+                            }else{
+                                editor= pickup_point_preferences.edit();
+                                editor.putString("id",db_id);
+                                editor.putString("email",db_email);
+                                editor.apply();
+                               Intent it = new Intent(SignInActivity.this,PickupMain.class);
+                               startActivity(it);
+                               finish();
+                            }
+
+                        }
+
+                    }catch (JSONException e){
+                        e.printStackTrace();
                     }
 
 
-                }else {
-                    new SweetAlertDialog(SignInActivity.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Error!")
-                            .setContentText("Invalid username or password.")
-                            .setConfirmText("Retry")
-                            .showCancelButton(false)
-                            .show();
-
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
 
