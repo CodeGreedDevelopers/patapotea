@@ -5,4 +5,5 @@
     <string name="add_name">Add name</string>
     <string name="add_eamil">Add email address</string>
     <string name="add_phone">Add mobile number</string>
+    <string name="about_app">This App was Created To Help People find Their Lost items At Ease.</string>
 </resources>

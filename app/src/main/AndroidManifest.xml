@@ -63,6 +63,10 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>
+        <activity android:name=".About"
+            android:parentActivityName=".PicupPoint.PickupMain">
+
+        </activity>
     </application>
 
 </manifest>

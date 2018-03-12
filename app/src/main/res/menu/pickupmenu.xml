@@ -6,13 +6,18 @@
         android:orderInCategory="100"
         android:title="Add Found Item" />
     <item
-        android:id="@+id/action_setting"
+        android:id="@+id/p_action_setting"
         android:orderInCategory="100"
         android:title="Setting" />
     <item
-        android:id="@+id/action_share"
+        android:id="@+id/p_action_share"
         android:orderInCategory="100"
         android:title="Share App"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/p_action_about"
+        android:orderInCategory="100"
+        android:title="About"
         app:showAsAction="never" />
 
 </menu>

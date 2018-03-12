@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.codegreeddevelopers.patapotea.About;
 import com.codegreeddevelopers.patapotea.AddItemActivity;
 import com.codegreeddevelopers.patapotea.CheckOut.CheckOutActivity;
 import com.codegreeddevelopers.patapotea.Item_details.ItemsDetailsActivity;
@@ -23,6 +24,7 @@ import com.codegreeddevelopers.patapotea.ListViewData.DataGetter;
 import com.codegreeddevelopers.patapotea.ListViewData.ItemsListAdapter;
 import com.codegreeddevelopers.patapotea.ListViewData.Suggestion;
 import com.codegreeddevelopers.patapotea.R;
+import com.codegreeddevelopers.patapotea.UserProfileActivity;
 import com.gturedi.views.StatefulLayout;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -49,7 +51,6 @@ public class PickupMain extends AppCompatActivity {
     SweetAlertDialog searching_dialog;
     String myjsonData="",all_items="",preference_email;
     SharedPreferences user_preferences;
-    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,6 +150,17 @@ public class PickupMain extends AppCompatActivity {
                 if (id == R.id.action_add_item) {
                     Intent intent=new Intent(PickupMain.this, AddItemActivity.class);
                     startActivity(intent);
+                }else if(id == R.id.p_action_about){
+                    Intent intent2=new Intent(PickupMain.this, About.class);
+                    startActivity(intent2);
+                }else if(id == R.id.p_action_setting){
+                    Intent intent2=new Intent(PickupMain.this, UserProfileActivity.class);
+                    startActivity(intent2);
+                }else if (id == R.id.p_action_share){
+                    Intent share=new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT,"Search For your Lost Documents such as ID card,Passports and ATM card using This Free Android App https://play.google.com/store/apps/details?id=com.codegreeddevelopers.patapotea");
+                    startActivity(Intent.createChooser(share,"Share Using"));
                 }
             }
         });
