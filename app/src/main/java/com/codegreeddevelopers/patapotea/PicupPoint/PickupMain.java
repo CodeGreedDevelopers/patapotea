@@ -2,6 +2,7 @@ package com.codegreeddevelopers.patapotea.PicupPoint;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -15,12 +16,15 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.codegreeddevelopers.patapotea.About;
 import com.codegreeddevelopers.patapotea.AddItemActivity;
+import com.codegreeddevelopers.patapotea.CheckOut.CheckOutActivity;
 import com.codegreeddevelopers.patapotea.Item_details.ItemsDetailsActivity;
 import com.codegreeddevelopers.patapotea.ListViewData.DataGetter;
 import com.codegreeddevelopers.patapotea.ListViewData.ItemsListAdapter;
 import com.codegreeddevelopers.patapotea.ListViewData.Suggestion;
 import com.codegreeddevelopers.patapotea.R;
+import com.codegreeddevelopers.patapotea.UserProfileActivity;
 import com.gturedi.views.StatefulLayout;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -45,11 +49,16 @@ public class PickupMain extends AppCompatActivity {
     StatefulLayout statefulLayout;
     List<Suggestion> suggestions_list;
     SweetAlertDialog searching_dialog;
-    String myjsonData="",all_items="";
+    String myjsonData="",all_items="",preference_email;
+    SharedPreferences user_preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pickup_main);
+
+        user_preferences = this.getSharedPreferences("UserInfo", MODE_PRIVATE);
+
+        preference_email = user_preferences.getString("email", null);
         suggestions_list = new ArrayList<>();
         suggestions_list.add(new Suggestion("Manyasa"));
 
@@ -141,6 +150,17 @@ public class PickupMain extends AppCompatActivity {
                 if (id == R.id.action_add_item) {
                     Intent intent=new Intent(PickupMain.this, AddItemActivity.class);
                     startActivity(intent);
+                }else if(id == R.id.p_action_about){
+                    Intent intent2=new Intent(PickupMain.this, About.class);
+                    startActivity(intent2);
+                }else if(id == R.id.p_action_setting){
+                    Intent intent2=new Intent(PickupMain.this, UserProfileActivity.class);
+                    startActivity(intent2);
+                }else if (id == R.id.p_action_share){
+                    Intent share=new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT,"Search For your Lost Documents such as ID card,Passports and ATM card using This Free Android App https://play.google.com/store/apps/details?id=com.codegreeddevelopers.patapotea");
+                    startActivity(Intent.createChooser(share,"Share Using"));
                 }
             }
         });
@@ -154,7 +174,9 @@ public class PickupMain extends AppCompatActivity {
         dynamicBox.showCustomView("greenmonster");
         Toast.makeText(this, "starting", Toast.LENGTH_SHORT).show();
         AsyncHttpClient httpClient=new AsyncHttpClient();
-        httpClient.get("http://www.duma.co.ke/patapotea/items_data_getter.php", new TextHttpResponseHandler() {
+        RequestParams params=new RequestParams();
+        params.put("user_email",preference_email);
+        httpClient.get("http://www.duma.co.ke/patapotea/pickup_item_getter.php", params,new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 //Toast.makeText(MainActivity.this,"failed", Toast.LENGTH_SHORT).show();
@@ -173,7 +195,7 @@ public class PickupMain extends AppCompatActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                //Toast.makeText(MainActivity.this,responseString, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PickupMain.this,responseString, Toast.LENGTH_SHORT).show();
                 itemsListAdapter.clear();
                 myjsonData=responseString;
                 all_items=responseString;
@@ -199,7 +221,7 @@ public class PickupMain extends AppCompatActivity {
                     JSONArray clicked_array=new JSONArray(myjsonData);
                     JSONObject object=clicked_array.getJSONObject(position);
 
-                    Intent intent=new Intent(PickupMain.this, ItemsDetailsActivity.class);
+                    Intent intent=new Intent(PickupMain.this, CheckOutActivity.class);
                     intent.putExtra("item_id",object.get("id").toString());
                     startActivity(intent);
                 } catch (JSONException e) {
@@ -215,7 +237,8 @@ public class PickupMain extends AppCompatActivity {
         AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
         RequestParams params=new RequestParams();
         params.put("query",query);
-        asyncHttpClient.post("http://www.duma.co.ke/patapotea/search_items.php", params, new TextHttpResponseHandler() {
+        params.put("user_email",preference_email);
+        asyncHttpClient.post("http://www.duma.co.ke/patapotea/pickup_search_item.php", params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 searching_dialog.show();

@@ -19,7 +19,7 @@
         android:layout_alignParentLeft="true">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/mainappbar"
+            android:id="@+id/pmainappbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
@@ -35,7 +35,7 @@
 
 
                 <ImageView
-                    android:id="@+id/iv_shop"
+                    android:id="@+id/piv_shop"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:minHeight="?attr/actionBarSize"
@@ -59,13 +59,13 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:id="@+id/backArrow"
+                            android:id="@+id/pbackArrow"
                             android:layout_width="20dp"
                             android:layout_height="18dp"
                             android:background="@drawable/ic_back_arrow"
                             android:backgroundTint="#FFFFFF"/>
                         <ImageView
-                            android:id="@+id/backArrow1"
+                            android:id="@+id/pbackArrow1"
                             android:layout_width="20dp"
                             android:layout_height="18dp"
                             android:background="@drawable/ic_back_arrow"
@@ -73,7 +73,7 @@
 
 
                         <ImageView
-                            android:id="@+id/img_logo"
+                            android:id="@+id/pimg_logo"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginLeft="40dp"
@@ -84,12 +84,12 @@
 
 
                         <customfonts.MyTextView_OpenSans_Regular
-                            android:id="@+id/txtheading"
+                            android:id="@+id/ptxtheading"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="10dp"
-                            android:layout_toRightOf="@+id/img_logo"
+                            android:layout_toRightOf="@+id/pimg_logo"
                             android:text="Ketan Car Point"
                             android:textSize="16sp"
                             android:visibility="gone"/>
@@ -117,7 +117,7 @@
 
 
                                 <ImageView
-                                    android:id="@+id/img_share"
+                                    android:id="@+id/pimg_share"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="20dp"
@@ -125,7 +125,7 @@
                                     android:backgroundTint="#FFFFFF"/>
 
                                 <ImageView
-                                    android:id="@+id/img_share1"
+                                    android:id="@+id/pimg_share1"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
                                     android:layout_marginRight="20dp"
@@ -156,7 +156,7 @@
                 android:focusableInTouchMode="true">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/logo_botswana"
+                    android:id="@+id/plogo_botswana"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center_horizontal"
@@ -195,7 +195,7 @@
                                 android:orientation="vertical">
 
                                 <customfonts.MyTextView_OpenSans_SemiBold
-                                    android:id="@+id/textview1"
+                                    android:id="@+id/ptextview1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="12dp"
@@ -223,7 +223,7 @@
                                     android:orientation="horizontal">
 
                                 <customfonts.MyTextView_OpenSans_Regular
-                                    android:id="@+id/item_name_display"
+                                    android:id="@+id/pitem_name_display"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
@@ -269,7 +269,7 @@
                                     android:orientation="horizontal">
 
                                     <customfonts.MyTextView_OpenSans_Regular
-                                        android:id="@+id/item_number_display"
+                                        android:id="@+id/pitem_number_display"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="-------------"
@@ -280,7 +280,7 @@
                                         />
 
                                     <customfonts.MyTextView_OpenSans_Regular
-                                        android:id="@+id/date_found_display"
+                                        android:id="@+id/pdate_found_display"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center"
@@ -299,6 +299,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="12dp"
                             android:layout_marginRight="12dp"
+                            android:layout_marginBottom="20dp"
                             android:layout_marginTop="12dp">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -312,7 +313,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginLeft="18dp"
-                                android:text="Pickup Location"
+                                android:text="Payment Status"
                                 android:textColor="#4fc631"
                                 android:textSize="15.3sp"
                                 />
@@ -327,67 +328,18 @@
                                 android:orientation="horizontal">
 
                                 <customfonts.MyTextView_OpenSans_Regular
-                                    android:id="@+id/pickup_loc"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Jkuat Studeez Mpesa\n Juja"
+                                    android:text="Fully Paid"
                                     android:textColor="#aab0b9"
                                     android:textSize="15.3sp"
                                     />
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="10dp"
-                                    android:background="@drawable/direction"/>
                             </LinearLayout>
-
-                                <customfonts.MyTextView_OpenSans_Regular
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginLeft="18dp"
-                                    android:text="Pickup Fee:"
-                                    android:textColor="#4fc631"
-                                    android:textSize="15.3sp"
-                                    />
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="18dp"
-                                    android:layout_marginRight="18dp"
-                                    android:layout_marginBottom="11dp"
-                                    android:orientation="horizontal">
-
-                                    <customfonts.MyTextView_OpenSans_Regular
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:text="Ksh. 100"
-                                        android:textColor="#aab0b9"
-                                        android:textSize="15.3sp"
-                                        />
-                                </LinearLayout>
 
                             </LinearLayout>
 
 
-                        </android.support.v7.widget.CardView>
-
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp"
-                            android:layout_marginBottom="18dp"
-                            android:layout_marginTop="12dp">
-
-                            <fragment
-                                android:name="com.google.android.gms.maps.SupportMapFragment"
-                                android:id="@+id/mapView"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"/>
                         </android.support.v7.widget.CardView>
 
                     </LinearLayout>
@@ -415,7 +367,7 @@
             android:layout_marginBottom="18dp"
             android:layout_marginTop="18dp"
             android:gravity="center_horizontal"
-            android:text="Claim Item"
+            android:text="Check Out Item"
             android:textColor="#000000"
             android:textSize="16.7sp"
             />
