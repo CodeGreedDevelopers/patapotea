@@ -6,48 +6,10 @@
 
     <color name="greenLight">#f176b667</color>
 
-    <color name="gray_light">#e6eff1</color>
     <color name="white">#fff</color>
 
     <!--Chat Type Tab Color-->
-    <color name="Indicator_tabTextColor">#B9E5B1</color>
-    <color name="Indicator_tabSelectedTextColor">#fff</color>
-    <color name="tabindiacator_background">#4fc631</color>
-    <color name="tabIndicator_color">#fff</color>
-    <color name="rating_color">#f6dc4f</color>
-    <color name="rating_grey_color">#e0e0e0</color>
     <color name="green">#4fc631</color>
 
-    <color name="string_black">#4b4b4b</color>
-    <color name="delivery_sucessfull">#5CBE65</color>
 
-    <color name="star_color">#F4E82B</color>
-
-    <color name="slide_1_buysell_inactive_color">#e0e1e1</color>
-    <color name="slide_2_buysell_inactive_color">#e0e1e1</color>
-    <color name="slide_3_buysell_inactive_color">#e0e1e1</color>
-
-
-    <color name="slide_1_active_color">#ff824a</color>
-    <color name="slide_2_active_color">#ff824a</color>
-    <color name="slide_3_active_color">#ff824a</color>
-    <color name="slide_4_active_color">#ff824a</color>
-    <color name="slide_5_active_color">#ff824a</color>
-
-
-    <array name="array_dot_active">
-        <item>@color/slide_1_active_color</item>
-        <item>@color/slide_2_active_color</item>
-        <item>@color/slide_3_active_color</item>
-        <item>@color/slide_4_active_color</item>
-        <item>@color/slide_5_active_color</item>
-    </array>
-
-
-    <array name="array_buysell_dot_inactive">
-
-        <item>@color/slide_1_buysell_inactive_color</item>
-        <item>@color/slide_2_buysell_inactive_color</item>
-        <item>@color/slide_3_buysell_inactive_color</item>
-    </array>
 </resources>

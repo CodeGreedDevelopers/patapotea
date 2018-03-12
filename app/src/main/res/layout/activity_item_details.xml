@@ -327,6 +327,7 @@
                                 android:orientation="horizontal">
 
                                 <customfonts.MyTextView_OpenSans_Regular
+                                    android:id="@+id/pickup_loc"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"

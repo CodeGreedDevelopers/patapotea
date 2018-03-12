@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codegreeddevelopers.patapotea.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,7 +38,7 @@ import cz.msebera.android.httpclient.Header;
 public class ItemsDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ImageView img_logo, logo_botswana, backArrow, img_share,img_share1, backArrow1,background_img;
-    TextView txtheading, textview1,item_number,item_name,date_found;
+    TextView txtheading, textview1,item_number,item_name,date_found,pickup_loc;
     LinearLayout claim_button;
     Context context;
     MapView mapView;
@@ -83,6 +84,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
         backArrow =  findViewById(R.id.backArrow);
         backArrow1 =  findViewById(R.id.backArrow1);
         txtheading =  findViewById(R.id.txtheading);
+        pickup_loc=findViewById(R.id.pickup_loc);
 
         img_share =  findViewById(R.id.img_share);
         img_share1 =  findViewById(R.id.img_share1);
@@ -164,7 +166,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 fetching_dialog.dismiss();
                 new SweetAlertDialog(ItemsDetailsActivity.this,SweetAlertDialog.ERROR_TYPE)
-                        .setContentText("Failed")
+                        .setContentText("Failed to retrieve Data\n Try Again")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
@@ -184,6 +186,14 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
                     item_name.setText(jsonObject.get("item_name").toString());
                     item_number.setText(jsonObject.get("item_number").toString());
                     txtheading.setText(jsonObject.get("item_type").toString());
+                    date_found.setText(jsonObject.get("dateFound").toString());
+                    pickup_loc.setText(jsonObject.get("physical_address").toString());
+
+                    if (jsonObject.get("loc_lat").toString().equals(null)){
+
+                    }else{
+                        load_marker(jsonObject.get("loc_lat").toString(),jsonObject.get("loc_loc").toString());
+                    }
                     //Picasso.with(ItemsDetailsActivity.this).load(R.drawable.item_diaplay_placeholder).placeholder(R.drawable.item_diaplay_placeholder).into(background_img);
 
                     //estting the image type
@@ -234,6 +244,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 pDialog.dismiss();
+                Toast.makeText(ItemsDetailsActivity.this, responseString, Toast.LENGTH_SHORT).show();
                 try {
                     JSONArray jsonArray=new JSONArray(responseString);
                     JSONObject jsonObject=jsonArray.getJSONObject(0);
@@ -256,14 +267,14 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng mypickup = new LatLng(-1.094403, 37.016405);
+
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
 //        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 //        mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
 
-        mMap.addMarker(new MarkerOptions().position(mypickup).title("My Item PickUp Point"));
+
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -271,8 +282,13 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_LOCATION_REQUEST_CODE);
             return;
         }
-        CameraPosition pickup=CameraPosition.builder().target(mypickup).zoom(16).bearing(0).tilt(45).build();
-        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(pickup));
+
         mMap.setMyLocationEnabled(true);
+    }
+    public void load_marker(String lat,String longi){
+        LatLng mypickup = new LatLng(Double.parseDouble(lat), Double.parseDouble(longi));
+        mMap.addMarker(new MarkerOptions().position(mypickup).title("My Item PickUp Point"));
+        CameraPosition pickup=CameraPosition.builder().target(mypickup).zoom(16).bearing(0).tilt(45).build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(pickup));
     }
 }

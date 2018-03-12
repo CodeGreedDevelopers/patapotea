@@ -13,7 +13,7 @@ public class StartActivity extends AppCompatActivity {
     LinearLayout get_pickup_point,get_user;
     SharedPreferences user_preferences;
     SharedPreferences.Editor editor;
-    String preference_email;
+    String preference_email,p_preference_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,9 @@ public class StartActivity extends AppCompatActivity {
         get_pickup_point.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                preference_email = user_preferences.getString("email", null);
-                if (preference_email!=null) {
+                p_preference_email = user_preferences.getString("p_email", null);
+
+                if (p_preference_email!=null) {
                     Intent intent = new Intent(StartActivity.this,PickupMain.class);
                     startActivity(intent);
                 }else {

@@ -123,13 +123,16 @@ public class SignInActivity extends AppCompatActivity {
                 if (responseString.trim().equals("true")){
                     //save the email to preference
                     editor= user_preferences.edit();
-                    editor.putString("email",email);
-                    editor.apply();
+
                     if (current_user.equals("normal_user")){
+                        editor.putString("email",email);
+                        editor.apply();
                         Intent it = new Intent(SignInActivity.this,MainActivity.class);
                         startActivity(it);
                         finish();
                     }else{
+                        editor.putString("p_email",email);
+                        editor.apply();
                         Intent it = new Intent(SignInActivity.this,PickupMain.class);
                         startActivity(it);
                         finish();
