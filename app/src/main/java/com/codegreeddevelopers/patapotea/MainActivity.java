@@ -25,6 +25,7 @@ import com.codegreeddevelopers.patapotea.ListViewData.DataGetter;
 import com.codegreeddevelopers.patapotea.ListViewData.ItemsListAdapter;
 import com.codegreeddevelopers.patapotea.ListViewData.Suggestion;
 import com.codegreeddevelopers.patapotea.MapActivity.MapActivity;
+import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
 import com.gturedi.views.StatefulLayout;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -149,6 +150,14 @@ public class MainActivity extends AppCompatActivity {
                 }else if (id == R.id.action_setting) {
                     Intent intent=new Intent(MainActivity.this, UserProfileActivity.class);
                     startActivity(intent);
+                }else if (id == R.id.action_share){
+                    Intent share=new Intent(Intent.ACTION_SEND);
+                    share.setType("text/plain");
+                    share.putExtra(Intent.EXTRA_TEXT,"Search For your Lost Documents such as ID card,Passports and ATM card using This Free Android App https://play.google.com/store/apps/details?id=com.codegreeddevelopers.patapotea");
+                    startActivity(Intent.createChooser(share,"Share Using"));
+                }else if(id == R.id.p_action_about){
+                    Intent intent2=new Intent(MainActivity.this, About.class);
+                    startActivity(intent2);
                 }
             }
         });
