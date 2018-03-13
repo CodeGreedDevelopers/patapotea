@@ -105,14 +105,14 @@ public class CheckOutActivity extends AppCompatActivity {
                 if (scrollRange + verticalOffset == 0) {
 
                     //is collapsed
-                    logo_botswana.setVisibility(View.GONE);
-                    textview1.setVisibility(View.GONE);
-                    txtheading.setVisibility(View.VISIBLE);
                     txtheading.setTextColor(Color.parseColor("#4d4d4d"));
                     img_share1.setVisibility(View.VISIBLE);
                     img_logo.setVisibility(View.VISIBLE);
                     backArrow1.setVisibility(View.VISIBLE);
                     isShow = true;
+                    logo_botswana.setVisibility(View.GONE);
+                    textview1.setVisibility(View.GONE);
+                    txtheading.setVisibility(View.VISIBLE);
 //                    toolbar.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 } else if (isShow) {
                     isShow = false;
@@ -161,6 +161,7 @@ public class CheckOutActivity extends AppCompatActivity {
                     item_name.setText(jsonObject.get("item_name").toString());
                     item_number.setText(jsonObject.get("item_number").toString());
                     txtheading.setText(jsonObject.get("item_type").toString());
+                    date_found.setText(jsonObject.get("dateFound").toString());
                     //Picasso.with(ItemsDetailsActivity.this).load(R.drawable.item_diaplay_placeholder).placeholder(R.drawable.item_diaplay_placeholder).into(background_img);
 
                     //estting the image type

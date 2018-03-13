@@ -1,6 +1,7 @@
 package Fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,10 +54,12 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
     ImageView item_image;
     public static SweetAlertDialog pDialog;
     AlertDialog.Builder popDialog;
+    static Activity activity;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        activity=getActivity();
         view = inflater.inflate(R.layout.fragment_add_item3, container, false);
 
         // obtain an instance of the SharedPreferences class
@@ -162,6 +165,7 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
                                 items_preferences.edit().clear().apply();
                                 Intent intent = new Intent(context, PickupMain.class);
                                 context.startActivity(intent);
+                                activity.finish();
                                 onFinish();
 
                             }
