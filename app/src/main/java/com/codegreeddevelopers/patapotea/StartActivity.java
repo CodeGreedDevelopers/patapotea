@@ -12,7 +12,6 @@ import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
 public class StartActivity extends AppCompatActivity {
     LinearLayout get_pickup_point,get_user;
     SharedPreferences user_preferences,pickup_point_preferences;
-    SharedPreferences.Editor editor;
     String preference_email,p_preference_email;
 
     @Override
