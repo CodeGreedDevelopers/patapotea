@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     share.setType("text/plain");
                     share.putExtra(Intent.EXTRA_TEXT,"Search For your Lost Documents such as ID card,Passports and ATM card using This Free Android App https://play.google.com/store/apps/details?id=com.codegreeddevelopers.patapotea");
                     startActivity(Intent.createChooser(share,"Share Using"));
-                }else if(id == R.id.p_action_about){
+                }else if(id == R.id.action_about){
                     Intent intent2=new Intent(MainActivity.this, About.class);
                     startActivity(intent2);
                 }

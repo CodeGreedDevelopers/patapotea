@@ -7,6 +7,7 @@
     <color name="greenLight">#f176b667</color>
 
     <color name="white">#fff</color>
+    <color name="transparent_">#1d6a35</color>
 
     <!--Chat Type Tab Color-->
     <color name="green">#4fc631</color>
