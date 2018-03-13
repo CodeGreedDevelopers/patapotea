@@ -155,6 +155,8 @@ public class SignInActivity extends AppCompatActivity {
                             if (current_user.equals("normal_user")){
                                 editor= user_preferences.edit();
                                 editor.putString("email",db_email);
+                                editor.putString("phone",db_phone);
+                                editor.putString("name",db_name);
                                 editor.apply();
                                Intent it = new Intent(SignInActivity.this,MainActivity.class);
                                startActivity(it);

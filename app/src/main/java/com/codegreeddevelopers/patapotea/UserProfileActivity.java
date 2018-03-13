@@ -38,8 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileActivity extends AppCompatActivity {
     TextView top_name,name,phone,email;
-    String display_name,display_email,preference_email;
-    String display_phone="";
+    String display_name,display_email,preference_email,display_phone="";
     Uri profile_url;
     CircleImageView profile;
     ImageView ic_edt_name,ic_edt_phone,ic_edt_email;
@@ -57,8 +56,10 @@ public class UserProfileActivity extends AppCompatActivity {
         pickup_point_preferences = this.getSharedPreferences("PickUpPointInfo", MODE_PRIVATE);
 
         preference_email = user_preferences.getString("email", null);
+        display_phone = user_preferences.getString("phone", null);
+        display_name = user_preferences.getString("name", null);
+        display_email = preference_email;
 
-        FetchUserInfo();
 
         //finding views
         top_name= findViewById(R.id.top_name);
@@ -70,6 +71,11 @@ public class UserProfileActivity extends AppCompatActivity {
         ic_edt_phone=findViewById(R.id.ic_edt_phone);
         ic_edt_email=findViewById(R.id.ic_edt_email);
         logout=findViewById(R.id.logout);
+
+
+//        FetchUserInfo();
+        DisplayUserInfo();
+
 
         ic_edt_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,11 +106,6 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     public void FetchUserInfo(){
-        pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#f158b940"));
-        pDialog.setTitleText("Fetching data...");
-        pDialog.setCancelable(false);
-        pDialog.show();
 
         RequestParams params = new RequestParams();
         params.put("email", preference_email);
@@ -112,7 +113,6 @@ public class UserProfileActivity extends AppCompatActivity {
         client.post("http://www.duma.co.ke/patapotea/fetch_user_info.php", params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                pDialog.dismissWithAnimation();
                 new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Error!")
                         .setContentText("Something went wrong.")
@@ -141,7 +141,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                pDialog.dismissWithAnimation();
 
                 try {
                     JSONArray contact_items=new JSONArray(responseString);
@@ -171,10 +170,6 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     public void DisplayUserInfo(){
-//        top_name.setText(display_name);
-//        name.setText(display_name);
-//        phone.setText(display_phone);
-//        email.setText(display_email);
 
         if (display_name!=null){
             if (display_name.isEmpty()){
@@ -511,7 +506,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
     public void LogOut(){
-        //clear the data from items_preference and redirect to main activity
+        //clear the data from items_preference and restart app
         user_preferences.edit().clear().apply();
         RestartApp();
     }

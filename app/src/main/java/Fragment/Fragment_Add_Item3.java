@@ -1,6 +1,7 @@
 package Fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
 import com.codegreeddevelopers.patapotea.R;
@@ -46,10 +48,10 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
-    public static SharedPreferences items_preferences;
+    public static SharedPreferences items_preferences,pickup_point_preferences;
     public static SharedPreferences.Editor editor;
     private View view;
-    public static String item_type,item_number,item_name,founder_name,founder_phone,founder_id,result;
+    public static String item_type,item_number,item_name,founder_name,founder_phone,founder_id,result, pickup_location_preference_id;
     ImageView item_image;
     public static SweetAlertDialog pDialog;
     AlertDialog.Builder popDialog;
@@ -61,6 +63,7 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
 
         // obtain an instance of the SharedPreferences class
         items_preferences = this.getActivity().getSharedPreferences("AddItem", MODE_PRIVATE);
+        pickup_point_preferences = this.getActivity().getSharedPreferences("PickUpPointInfo", MODE_PRIVATE);
 
         item_image=view.findViewById(R.id.item_image);
 
@@ -88,6 +91,7 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
         founder_name = items_preferences.getString("founder_name", null);
         founder_phone = items_preferences.getString("founder_phone", null);
         founder_id = items_preferences.getString("founder_id", null);
+        pickup_location_preference_id = pickup_point_preferences.getString("id", null);
         check_internet_conn(context);
 
     }
@@ -141,6 +145,7 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
             params.put("founder_name", founder_name);
             params.put("founder_id", founder_id);
             params.put("founder_phone", founder_phone);
+            params.put("pickup_location_id", pickup_location_preference_id);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -162,7 +167,6 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
                                 items_preferences.edit().clear().apply();
                                 Intent intent = new Intent(context, PickupMain.class);
                                 context.startActivity(intent);
-                                onFinish();
 
                             }
                         })
