@@ -24,6 +24,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener {
     GoogleMap mMap;
@@ -49,6 +57,32 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
+
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post("http://www.duma.co.ke/patapotea/pickup_locations.php", new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int i, Header[] headers, String s, Throwable throwable) {
+                Toast.makeText(MapActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(int i, Header[] headers, String s) {
+                try {
+                    JSONArray jsonArray = new JSONArray(s);
+                    for (int v = 0; v < jsonArray.length(); v++) {
+                        JSONObject object = jsonArray.getJSONObject(v);
+                        String loc_name = object.getString("physical_address");
+                        Double loc_lat = Double.parseDouble(object.getString("loc_lat").trim());
+                        Double loc_long = Double.parseDouble(object.getString("loc_loc").trim());
+                        LatLng pickUp = new LatLng(loc_lat, loc_long);
+                        mMap.addMarker(new MarkerOptions().position(pickUp).title(loc_name));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 //        mMap.addMarker(new MarkerOptions().position(jkuat).title("Marker Jkuat"));
 

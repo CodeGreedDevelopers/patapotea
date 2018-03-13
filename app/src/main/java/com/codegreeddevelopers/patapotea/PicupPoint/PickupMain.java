@@ -50,15 +50,15 @@ public class PickupMain extends AppCompatActivity {
     List<Suggestion> suggestions_list;
     SweetAlertDialog searching_dialog;
     String myjsonData="",all_items="",preference_email;
-    SharedPreferences user_preferences;
+    SharedPreferences pickup_point_preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pickup_main);
 
-        user_preferences = this.getSharedPreferences("UserInfo", MODE_PRIVATE);
+        pickup_point_preferences = this.getSharedPreferences("PickUpPointInfo", MODE_PRIVATE);
 
-        preference_email = user_preferences.getString("email", null);
+        preference_email = pickup_point_preferences.getString("email", null);
         suggestions_list = new ArrayList<>();
         suggestions_list.add(new Suggestion("Manyasa"));
 

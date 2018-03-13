@@ -2,6 +2,7 @@ package com.codegreeddevelopers.patapotea;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
 import com.codegreeddevelopers.patapotea.R;
 
 import Adapter.Add_Item_PageAdapter;
@@ -224,4 +226,5 @@ public class AddItemActivity extends AppCompatActivity {
             txt3.setBackground(ContextCompat.getDrawable(context, R.drawable.dark_green_circle));
         }
     }
+
 }
