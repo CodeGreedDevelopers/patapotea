@@ -53,7 +53,7 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
     private View view;
     public static String item_type,item_number,item_name,founder_name,founder_phone,founder_id,result, pickup_location_preference_id;
     ImageView item_image;
-    public static SweetAlertDialog pDialog;
+    public static SweetAlertDialog pDialog,sDialog;
     AlertDialog.Builder popDialog;
     public static Activity activity;
 
@@ -180,21 +180,22 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
             @Override
             public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
                 pDialog.dismissWithAnimation();
+                sDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                sDialog.setTitleText("Error!");
+                sDialog.setContentText("The details were not saved. Do you want to retry again?");
+                sDialog.setCancelText("Cancel");
+                sDialog.setConfirmText("Retry");
+                sDialog.showCancelButton(true);
+                sDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sDialog.dismissWithAnimation();
+                        GetItems(context);
 
-                new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Error!")
-                        .setContentText("The details were not saved. Do you want to retry again?")
-                        .setCancelText("Cancel")
-                        .setConfirmText("Retry")
-                        .showCancelButton(true)
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                GetItems(context);
+                    }
+                });
+                sDialog.show();
 
-                            }
-                        })
-                        .show();
             }
         });
 
