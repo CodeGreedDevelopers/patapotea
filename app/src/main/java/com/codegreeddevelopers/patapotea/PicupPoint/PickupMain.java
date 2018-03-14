@@ -172,7 +172,7 @@ public class PickupMain extends AppCompatActivity {
         View customView = getLayoutInflater().inflate(R.layout.loading_activity, pickup_items_List, false);
         dynamicBox.addCustomView(customView,"greenmonster");
         dynamicBox.showCustomView("greenmonster");
-        Toast.makeText(this, "starting", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "starting", Toast.LENGTH_SHORT).show();
         AsyncHttpClient httpClient=new AsyncHttpClient();
         RequestParams params=new RequestParams();
         params.put("user_email",preference_email);
