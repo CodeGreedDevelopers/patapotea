@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         //searching dialog box
         searching_dialog= new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         searching_dialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        searching_dialog.setTitleText("Fetching Data...");
+        searching_dialog.setTitleText("Searching Data...");
         searching_dialog.setCancelable(false);
 
 
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         View customView = getLayoutInflater().inflate(R.layout.loading_activity, items_List, false);
         dynamicBox.addCustomView(customView,"greenmonster");
         dynamicBox.showCustomView("greenmonster");
-        Toast.makeText(this, "starting", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "starting", Toast.LENGTH_SHORT).show();
         AsyncHttpClient  httpClient=new AsyncHttpClient();
         httpClient.get("http://www.duma.co.ke/patapotea/items_data_getter.php", new TextHttpResponseHandler() {
             @Override
