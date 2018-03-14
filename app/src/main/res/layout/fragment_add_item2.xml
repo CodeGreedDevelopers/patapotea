@@ -63,6 +63,7 @@
             android:paddingLeft="10dp"
             android:textSize="13sp"
             android:paddingEnd="10dp"
+            android:inputType="phone"
             android:layout_marginStart="30dp"
             android:paddingStart="10dp" />
 

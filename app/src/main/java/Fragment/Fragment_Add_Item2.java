@@ -124,7 +124,11 @@ public class Fragment_Add_Item2 extends android.support.v4.app.Fragment {
         }else if (the_item=="founder_id"){
             founder_id.setBackgroundResource(R.drawable.spinner_background_error);
 
-        }else{
+        }else if(the_item=="founder_phone_error"){
+            founder_phone.setError("Please Enter Correct Phone Number e.g 07XXXXXXXX");
+            founder_phone.setBackgroundResource(R.drawable.spinner_background_error);
+        }
+        else{
             founder_name.setBackgroundResource(R.drawable.spinner_background);
             founder_phone.setBackgroundResource(R.drawable.spinner_background);
             founder_id.setBackgroundResource(R.drawable.spinner_background);

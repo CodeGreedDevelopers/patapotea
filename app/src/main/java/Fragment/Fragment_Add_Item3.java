@@ -167,9 +167,9 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 //clear the data from items_preference and redirect to main activity
                                 items_preferences.edit().clear().apply();
-                                Intent intent = new Intent(context, PickupMain.class);
-                                context.startActivity(intent);
-                                activity.finish();
+//                                Intent intent = new Intent(context, PickupMain.class);
+//                                context.startActivity(intent);
+                                activity.onBackPressed();
 
                             }
                         })

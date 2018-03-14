@@ -147,9 +147,11 @@ public class AddItemActivity extends AppCompatActivity {
                     Fragment_Add_Item2.ChangeBackgroundDrawable("founder_phone");
                     Fragment_Add_Item2.ChangeBackgroundDrawable("founder_id");
                 }else if (founder_phone.isEmpty()){
-                    Fragment_Add_Item2.ChangeBackgroundDrawable("founder_name");
-                }else if (founder_name.isEmpty()){
                     Fragment_Add_Item2.ChangeBackgroundDrawable("founder_phone");
+                }else if(founder_phone.length()<10 ||founder_phone.length()>10){
+                    Fragment_Add_Item2.ChangeBackgroundDrawable("founder_phone_error");
+                } else if (founder_name.isEmpty()){
+                    Fragment_Add_Item2.ChangeBackgroundDrawable("founder_name");
                 }else {
                     Fragment_Add_Item2.ChangeBackgroundDrawable("");
                     CURRENTPAGE++;
