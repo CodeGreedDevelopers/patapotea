@@ -67,6 +67,14 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
         fetching_dialog.setCancelable(false);
         fetching_dialog.show();
 
+        //request Location permission
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_LOCATION_REQUEST_CODE);
+            return;
+        }
+
 
         //claiming button
         claim_button=findViewById(R.id.linear_button);
@@ -244,7 +252,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 pDialog.dismiss();
-                Toast.makeText(ItemsDetailsActivity.this, responseString, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ItemsDetailsActivity.this, responseString, Toast.LENGTH_SHORT).show();
                 try {
                     JSONArray jsonArray=new JSONArray(responseString);
                     JSONObject jsonObject=jsonArray.getJSONObject(0);
@@ -275,13 +283,6 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
         mMap.getUiSettings().setZoomGesturesEnabled(true);
 
 
-
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_LOCATION_REQUEST_CODE);
-            return;
-        }
 
         mMap.setMyLocationEnabled(true);
     }

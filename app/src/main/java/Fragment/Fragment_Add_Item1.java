@@ -59,6 +59,7 @@ public class Fragment_Add_Item1 extends android.support.v4.app.Fragment {
         list.add("Student ID");
         list.add("Passport");
         list.add("ATM Card");
+        list.add("Driving Licence");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, R.id.spinner_text, list);
         sp_item_type.setAdapter(dataAdapter);
