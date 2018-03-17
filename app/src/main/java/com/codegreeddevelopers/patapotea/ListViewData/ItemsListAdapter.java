@@ -43,10 +43,10 @@ public class ItemsListAdapter extends ArrayAdapter<DataGetter> {
 
         // Lookup view for data population
 
-        TextView itemType = (TextView) convertView.findViewById(R.id.item_type);
-        TextView itemNumber = (TextView) convertView.findViewById(R.id.document_number);
-        TextView itemName = (TextView) convertView.findViewById(R.id.document_name);
-        TextView dateFound = (TextView) convertView.findViewById(R.id.found_date);
+        TextView itemType =  convertView.findViewById(R.id.item_type);
+        TextView itemNumber = convertView.findViewById(R.id.document_number);
+        TextView itemName = convertView.findViewById(R.id.document_name);
+        TextView dateFound = convertView.findViewById(R.id.found_date);
         ImageView imageView=convertView.findViewById(R.id.item_image);
 
         if (list_item_data.item_type.trim().equals("ATM Card")){
@@ -57,7 +57,9 @@ public class ItemsListAdapter extends ArrayAdapter<DataGetter> {
             Picasso.with(getContext()).load(R.drawable.passport_icon).into(imageView);
         }else if (list_item_data.item_type.trim().equals("Visa Card")){
             Picasso.with(getContext()).load(R.drawable.visa_card_icon).into(imageView);
-        }else{
+        }else if (list_item_data.item_type.trim().equals("Driving Licence")){
+            Picasso.with(getContext()).load(R.drawable.driver_licence).into(imageView);
+        } else{
             Picasso.with(getContext()).load(R.drawable.national_card).into(imageView);
         }
 

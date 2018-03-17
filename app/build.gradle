@@ -41,6 +41,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
     implementation 'com.yarolegovich:lovely-dialog:1.1.0'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.3'
+    implementation 'com.mikepenz:fontawesome-typeface:5.0.6.0@aar'
+    implementation 'com.mikepenz:iconics-core:3.0.3@aar'
+    implementation "com.android.support:appcompat-v7:27.1.0"
+    implementation 'com.github.chathuralakmal:AndroidImagePopup:1.2.1'
+    implementation 'com.mikepenz:iconics-views:3.0.3@aar'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

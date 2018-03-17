@@ -131,7 +131,7 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
         // start picker to get image for cropping and then use the image in cropping activity
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
+                //.setAspectRatio(1, 1)
                 .setCropMenuCropButtonTitle("Done")
                 .start(getContext(), this);
     }
