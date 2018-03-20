@@ -1,15 +1,15 @@
 package com.codegreeddevelopers.patapotea;
 
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -48,6 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new LovelyInfoDialog(SignUpActivity.this)
                         .setTopColorRes(R.color.colorPrimary)
+                        .setTopTitle("Privacy, Terms & Conditions")
                         .setIcon(R.drawable.ic_info)
                         .setTitle(R.string.info_title)
                         //.configureMessageView(message->message.setMovementMethod(new ScrollingMovementMethod()))
@@ -67,7 +68,10 @@ public class SignUpActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetUserInfo();
+                if (validate()){
+                    GetUserInfo();
+                }
+
             }
         });
     }
@@ -142,5 +146,49 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public boolean validate() {
+        boolean valid = true;
+
+        String _name = fullname.getText().toString();
+        String _email = email.getText().toString();
+        String _password = password.getText().toString();
+        String _confirm_pass=confirm_password.getText().toString();
+
+        if (_name.isEmpty() ||_name.length() < 3) {
+            fullname.setError("at least 3 characters");
+            valid = false;
+        } else {
+            fullname.setError(null);
+        }
+        if (checkBox.isChecked()){
+
+        }else{
+            Toast.makeText(this, "Please Accept Terms & Conditions", Toast.LENGTH_SHORT).show();
+            valid=false;
+        }
+
+        if (_password.equals(_confirm_pass)){
+            confirm_password.setError(null);
+        }else{
+            confirm_password.setError("Passwords Do Not Match");
+            valid=false;
+        }
+
+        if (_email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(_email).matches()) {
+            email.setError("enter a valid email address");
+            valid = false;
+        } else {
+            email.setError(null);
+        }
+
+        if (_password.isEmpty() || _password.length() < 4 || _password.length() > 10) {
+            password.setError("between 4 and 10 alphanumeric characters");
+            valid = false;
+        } else {
+            password.setError(null);
+        }
+
+        return valid;
     }
 }
