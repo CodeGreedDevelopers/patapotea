@@ -50,8 +50,6 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
     ImageView img_logo, logo_botswana, backArrow, img_share, img_share1, backArrow1, background_img;
     TextView txtheading, textview1, item_number, item_name, date_found, pickup_loc,pickupfee;
     LinearLayout claim_button;
-    Context context;
-    MapView mapView;
     GoogleMap mMap;
     String data,img;
     SweetAlertDialog fetching_dialog;
@@ -65,6 +63,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
 
         data = getIntent().getStringExtra("item_id");
 
+
         //map adding
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
@@ -77,14 +76,6 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
         fetching_dialog.setTitleText("Fetching Data...");
         fetching_dialog.setCancelable(false);
         fetching_dialog.show();
-
-        //request Location permission
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION_REQUEST_CODE);
-            return;
-        }
 
 
         //claiming button
@@ -110,6 +101,8 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
         img_share1 = findViewById(R.id.img_share1);
         pickupfee=findViewById(R.id.pickup_fee);
 
+        fetch_data_online(data);
+
         iconicsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +110,6 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
-        fetch_data_online(data);
 
         item_number.setOnClickListener(new View.OnClickListener() {
             @Override
