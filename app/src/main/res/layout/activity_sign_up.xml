@@ -159,7 +159,30 @@
                 android:layout_marginBottom="10dp"
                 android:background="#ADCCE2"/>
 
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent" >
 
+                <CheckBox
+                    android:id="@+id/terms_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="#ADCCE2"
+                    />
+
+                <TextView
+                    android:id="@+id/text_terms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="#ADCCE2"
+                    android:text="@string/terms_and_condition"
+                    android:clickable="true" />
+
+            </LinearLayout>
 
 
             <customfonts.MyTextView

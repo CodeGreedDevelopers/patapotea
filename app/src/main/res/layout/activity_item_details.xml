@@ -360,6 +360,7 @@
                                     android:orientation="horizontal">
 
                                     <customfonts.MyTextView_OpenSans_Regular
+                                        android:id="@+id/pickup_fee"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
@@ -367,6 +368,12 @@
                                         android:textColor="#aab0b9"
                                         android:textSize="15.3sp"
                                         />
+                                    <com.mikepenz.iconics.view.IconicsImageView
+                                        android:id="@+id/image_icon"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        app:iiv_color="#546"
+                                        app:iiv_icon="faw_image" />
                                 </LinearLayout>
 
                             </LinearLayout>

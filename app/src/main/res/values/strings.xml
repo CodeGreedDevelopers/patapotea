@@ -6,4 +6,8 @@
     <string name="add_eamil">Add email address</string>
     <string name="add_phone">Add mobile number</string>
     <string name="about_app">This App was Created To Help People find Their Lost items At Ease.</string>
+    <string name="terms_and_condition">I have read and accepted the <a href='https://www.patapotea.com/privacy'>privacy statement</a> and <a href='https://www.patapotea.com/tos'>terms of service.</a></string>
+    <string name="info_title">Terms &amp; Conditions</string>
+    <string name="info_message">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.\n<b>"Privacy"</b>\n
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
 </resources>
