@@ -1,11 +1,19 @@
 package com.codegreeddevelopers.patapotea;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +32,10 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+import com.wang.avi.AVLoadingIndicatorView;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,14 +50,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileActivity extends AppCompatActivity {
     TextView top_name,name,phone,email;
-    String display_name,display_email,preference_email,display_phone="";
+    String display_name,display_email,preference_email,display_phone="",user_type,result;
     Uri profile_url;
     CircleImageView profile;
     ImageView ic_edt_name,ic_edt_phone,ic_edt_email;
-    SweetAlertDialog pDialog;
     SharedPreferences user_preferences,pickup_point_preferences;
+    SweetAlertDialog pDialog,sDialog;
     SharedPreferences.Editor editor;
     CardView logout;
+    AlertDialog.Builder popDialog;
+    AVLoadingIndicatorView avi;
+    Uri resultUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +70,11 @@ public class UserProfileActivity extends AppCompatActivity {
         user_preferences = this.getSharedPreferences("UserInfo", MODE_PRIVATE);
         pickup_point_preferences = this.getSharedPreferences("PickUpPointInfo", MODE_PRIVATE);
 
-        preference_email = user_preferences.getString("email", null);
-        display_phone = user_preferences.getString("phone", null);
-        display_name = user_preferences.getString("name", null);
-        display_email = preference_email;
+        if (user_preferences.getString("email", null)==null){
+            user_type="pickup_point";
+        }else {
+            user_type="normal_user";
+        }
 
 
         //finding views
@@ -71,9 +87,8 @@ public class UserProfileActivity extends AppCompatActivity {
         ic_edt_phone=findViewById(R.id.ic_edt_phone);
         ic_edt_email=findViewById(R.id.ic_edt_email);
         logout=findViewById(R.id.logout);
+        avi=findViewById(R.id.avi);
 
-
-//        FetchUserInfo();
         DisplayUserInfo();
 
 
@@ -103,73 +118,28 @@ public class UserProfileActivity extends AppCompatActivity {
                 LogOut();
             }
         });
-    }
-
-    public void FetchUserInfo(){
-
-        RequestParams params = new RequestParams();
-        params.put("email", preference_email);
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.post("http://www.duma.co.ke/patapotea/fetch_user_info.php", params, new TextHttpResponseHandler() {
+        profile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Error!")
-                        .setContentText("Something went wrong.")
-                        .setCancelText("Cancel")
-                        .setConfirmText("Retry")
-                        .showCancelButton(true)
-                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                sweetAlertDialog.dismiss();
-                                Intent it = new Intent(UserProfileActivity.this,PickupMain.class);
-                                startActivity(it);
-                                finish();
-                            }
-                        })
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                sweetAlertDialog.dismiss();
-                                FetchUserInfo();
-                            }
-                        })
-                        .show();
-
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                try {
-                    JSONArray contact_items=new JSONArray(responseString);
-
-                    JSONObject info=contact_items.getJSONObject(0);
-                    try {
-                        display_name=info.getString("name");
-                        display_email=info.getString("email");
-                        display_phone=info.getString("phone");
-
-                        DisplayUserInfo();
-
-
-                    }catch (JSONException e){
-                        e.printStackTrace();
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            public void onClick(View v) {
+                check_storage_permission();
 
             }
         });
-
     }
 
     public void DisplayUserInfo(){
+
+        if (user_type.equals("normal_user")){
+            preference_email = user_preferences.getString("email", null);
+            display_phone = user_preferences.getString("phone", null);
+            display_name = user_preferences.getString("name", null);
+        }else {
+            preference_email = pickup_point_preferences.getString("email", null);
+            display_phone = pickup_point_preferences.getString("phone", null);
+            display_name = pickup_point_preferences.getString("name", null);
+        }
+
+        display_email = preference_email;
 
         if (display_name!=null){
             if (display_name.isEmpty()){
@@ -237,6 +207,19 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
     public void ChangeNameDialog() {
+//        new LovelyTextInputDialog(this)
+//                .setTopColorRes(R.color.colorPrimary)
+//                .setTitle("Update your name")
+//                .setMessage("Please input your new name")
+//                .setIcon(R.drawable.ic_usr_dp)
+//                .setInputType(InputType.TYPE_CLASS_TEXT)
+//                .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
+//                    @Override
+//                    public void onTextInputConfirmed(String text) {
+//                        Toast.makeText(UserProfileActivity.this, text, Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .show();
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final EditText edt = new EditText(this);
         edt.setText(name.getText());
@@ -320,7 +303,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         String edt_phone=edt.getText().toString();
 
-                        phone.setText(edt_phone);
                         b.dismiss();
                         pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE);
                         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
@@ -369,7 +351,6 @@ public class UserProfileActivity extends AppCompatActivity {
                         pDialog.setTitleText("Updating");
                         pDialog.setCancelable(false);
                         pDialog.show();
-                        email.setText(edt_email);
 
 
                     }
@@ -381,6 +362,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public void UpdateName(final String new_name){
         RequestParams params = new RequestParams();
         params.put("current_email", preference_email);
+        params.put("user_type", user_type);
         params.put("name", new_name);
         AsyncHttpClient client = new AsyncHttpClient();
         client.post("http://www.duma.co.ke/patapotea/update_user_info.php", params, new TextHttpResponseHandler() {
@@ -407,7 +389,20 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
+                if (user_type.equals("normal_user")){
+                    //update name to pickup_point_preferences
+                    editor= user_preferences.edit();
+                    editor.putString("name",new_name);
+                    editor.apply();
+                }else {
+                    //update name to user_preferences
+                    editor= pickup_point_preferences.edit();
+                    editor.putString("name",new_name);
+                    editor.apply();
+                }
+
                 pDialog.dismissWithAnimation();
+                DisplayUserInfo();
                 new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Success!")
                         .setContentText("Name successfully updated.")
@@ -422,6 +417,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public void UpdatePhone(final String new_phone){
         RequestParams params = new RequestParams();
         params.put("current_email", preference_email);
+        params.put("user_type", user_type);
         params.put("phone", new_phone);
         AsyncHttpClient client = new AsyncHttpClient();
         client.post("http://www.duma.co.ke/patapotea/update_user_info.php", params, new TextHttpResponseHandler() {
@@ -447,8 +443,21 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                //update name to pickup_point_preferences
+                if (user_type.equals("normal_user")){
+                    //update name to user_preferences
+                    editor= user_preferences.edit();
+                    editor.putString("phone",new_phone);
+                    editor.apply();
+                }else {
+                    //update name to user_preferences
+                    editor= pickup_point_preferences.edit();
+                    editor.putString("phone",new_phone);
+                    editor.apply();
+                }
 
                 pDialog.dismissWithAnimation();
+                DisplayUserInfo();
                 new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Success!")
                         .setContentText("Phone successfully updated.")
@@ -463,6 +472,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public void UpdateEmail(final String new_email){
         RequestParams params = new RequestParams();
         params.put("current_email", preference_email);
+        params.put("user_type", user_type);
         params.put("email", new_email);
         AsyncHttpClient client = new AsyncHttpClient();
         client.post("http://www.duma.co.ke/patapotea/update_user_info.php", params, new TextHttpResponseHandler() {
@@ -482,6 +492,7 @@ public class UserProfileActivity extends AppCompatActivity {
                                 UpdateEmail(new_email);
                             }
                         })
+
                         .show();
 
             }
@@ -489,11 +500,22 @@ public class UserProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 //update email to user_preferences
-                editor= user_preferences.edit();
-                editor.putString("email",new_email);
-                editor.apply();
+                //update name to pickup_point_preferences
+                if (user_type.equals("normal_user")){
+                    //update name to user_preferences
+                    editor= user_preferences.edit();
+                    editor.putString("email",new_email);
+                    editor.apply();
+                }else {
+                    //update name to user_preferences
+                    editor= pickup_point_preferences.edit();
+                    editor.putString("email",new_email);
+                    editor.apply();
+                }
+
 
                 pDialog.dismissWithAnimation();
+                DisplayUserInfo();
                 new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Success!")
                         .setContentText("Email successfully updated.")
@@ -505,9 +527,133 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
     }
+    void openImageChooser() {
+        // start picker to get image for cropping and then use the image in cropping activity
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setCropMenuCropButtonTitle("Done")
+                .setAspectRatio(1, 1)
+                .start(this);
+    }
+    private void check_storage_permission(){
+        if (ActivityCompat.checkSelfPermission(UserProfileActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+
+            if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},100);
+
+            }
+
+        }else {
+            openImageChooser();
+        }
+
+    }
+    private String getRealPathFromURI(Uri contentURI) {
+        Cursor cursor = this.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        UploadItems(UserProfileActivity.this);
+        return result;
+    }
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if (reqCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                resultUri = result.getUri();
+
+                new File(getRealPathFromURI(resultUri));
+                //Display the image before uploading
+//                profile.setImageURI(resultUri);
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                result.getError();
+            }
+        }
+
+    }
+    public void UploadItems(final Context context){
+        avi.smoothToShow();
+        RequestParams params = new RequestParams();
+        AsyncHttpClient client = new AsyncHttpClient();
+        try {
+            params.put("profile_image", new File(result));
+            params.put("current_email", preference_email);
+            params.put("user_type", user_type);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        client.post("http://www.duma.co.ke/patapotea/update_user_info.php", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                avi.smoothToHide();
+                profile.setImageURI(resultUri);
+
+
+            }
+
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                avi.smoothToHide();
+                sDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
+                sDialog.setTitleText("Error!");
+                sDialog.setContentText("Profile image was not updated. Do you want to retry again?");
+                sDialog.setCancelText("Cancel");
+                sDialog.setConfirmText("Retry");
+                sDialog.showCancelButton(true);
+                sDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sDialog.dismissWithAnimation();
+                        UploadItems(context);
+
+                    }
+                });
+                sDialog.show();
+
+            }
+        });
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode==100 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+            openImageChooser();
+
+        }else {
+            popDialog=new AlertDialog.Builder(this);
+            popDialog.setTitle("Permission")
+                    .setMessage(Html.fromHtml("<font color='#000000'>Please grant the storage permission for the normal working of the app.</font>"))
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            check_storage_permission();
+
+                        }
+                    });
+            popDialog.create().show();
+
+
+
+        }
+    }
     public void LogOut(){
         //clear the data from items_preference and restart app
-        user_preferences.edit().clear().apply();
+        if (user_type.equals("normal_user")){
+            user_preferences.edit().clear().apply();
+        }else{
+            pickup_point_preferences.edit().clear().apply();
+        }
+
         RestartApp();
     }
 

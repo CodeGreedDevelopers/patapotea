@@ -54,8 +54,8 @@ public class Fragment_Add_Item1 extends android.support.v4.app.Fragment {
 
 
         List<String> list = new ArrayList<>();
-        list.add("National ID ");
-        list.add("Visa Card ");
+        list.add("National ID");
+        list.add("Visa Card");
         list.add("Student ID");
         list.add("Passport");
         list.add("ATM Card");

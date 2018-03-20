@@ -49,7 +49,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
     public static SharedPreferences items_preferences,pickup_point_preferences;
-    public static SharedPreferences.Editor editor;
     private View view;
     public static String item_type,item_number,item_name,founder_name,founder_phone,founder_id,result, pickup_location_preference_id;
     ImageView item_image;
@@ -104,13 +103,13 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
-                File imageFile = new File(getRealPathFromURI(resultUri));
+                new File(getRealPathFromURI(resultUri));
 
                 //Display the image before uploading
                 item_image.setImageURI(resultUri);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
+                result.getError();
             }
         }
 
@@ -131,7 +130,6 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
         // start picker to get image for cropping and then use the image in cropping activity
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
                 .setCropMenuCropButtonTitle("Done")
                 .start(getContext(), this);
     }
@@ -167,8 +165,6 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
                             public void onClick(SweetAlertDialog sweetAlertDialog) {
                                 //clear the data from items_preference and redirect to main activity
                                 items_preferences.edit().clear().apply();
-//                                Intent intent = new Intent(context, PickupMain.class);
-//                                context.startActivity(intent);
                                 activity.onBackPressed();
 
                             }
@@ -225,27 +221,30 @@ public class Fragment_Add_Item3 extends android.support.v4.app.Fragment {
             UploadItems(context);
 
         }else{
-            pDialog.dismissWithAnimation();
-
-
             final SweetAlertDialog sDialog = new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE);
             sDialog.setTitleText("Error!");
-            sDialog.setContentText("No internet connection. check your connection and click retry");
+            sDialog.setContentText("No internet connection. ");
             sDialog.setCancelText("Cancel");
-            sDialog.setCancelable(false);
             sDialog.setConfirmText("Retry");
             sDialog.showCancelButton(true);
             sDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                 @Override
                 public void onClick(SweetAlertDialog sweetAlertDialog) {
-                    sDialog.dismissWithAnimation();
+                    pDialog.dismiss();
                     GetItems(context);
-
+                    sDialog.dismiss();
 
                 }
             });
-            pDialog.show();
+            sDialog.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                @Override
+                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                    pDialog.dismiss();
+                    sDialog.dismiss();
 
+                }
+            });
+            sDialog.show();
 
         }
 

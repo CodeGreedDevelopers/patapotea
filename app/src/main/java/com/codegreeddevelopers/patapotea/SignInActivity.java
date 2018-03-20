@@ -133,43 +133,44 @@ public class SignInActivity extends AppCompatActivity {
                     JSONObject info=user_info.getJSONObject(1);
                     JSONObject r_info=user_info.getJSONObject(0);
                     try {
-                        if (current_user.equals("normal_user")){
-                            db_phone=info.getString("phone");
-                            db_name=info.getString("name");
 
-                        }else{
+                        if (current_user.equals("pickup_point")){
                             db_id=info.getString("id");
 
                         }
+                        db_phone=info.getString("phone");
+                        db_name=info.getString("name");
                         db_email=info.getString("email");
                         db_response=r_info.getString("response");
 
-                        if (db_response.equals("false")){
-                            new SweetAlertDialog(SignInActivity.this, SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Error!")
-                                    .setContentText("Invalid username or password.")
-                                    .setConfirmText("Ok")
-                                    .showCancelButton(false)
-                                    .show();
-                        }else {
+                        if (db_response.equals("true")){
                             if (current_user.equals("normal_user")){
                                 editor= user_preferences.edit();
                                 editor.putString("email",db_email);
                                 editor.putString("phone",db_phone);
                                 editor.putString("name",db_name);
                                 editor.apply();
-                               Intent it = new Intent(SignInActivity.this,MainActivity.class);
-                               startActivity(it);
-                               finish();
+                                Intent it = new Intent(SignInActivity.this,MainActivity.class);
+                                startActivity(it);
+                                finish();
                             }else{
                                 editor= pickup_point_preferences.edit();
                                 editor.putString("id",db_id);
                                 editor.putString("email",db_email);
+                                editor.putString("phone",db_phone);
+                                editor.putString("name",db_name);
                                 editor.apply();
-                               Intent it = new Intent(SignInActivity.this,PickupMain.class);
-                               startActivity(it);
-                               finish();
+                                Intent it = new Intent(SignInActivity.this,PickupMain.class);
+                                startActivity(it);
+                                finish();
                             }
+                        }else {
+                            new SweetAlertDialog(SignInActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Error!")
+                                    .setContentText("Invalid username or password.")
+                                    .setConfirmText("Ok")
+                                    .showCancelButton(false)
+                                    .show();
 
                         }
 
