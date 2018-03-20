@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 //Toast.makeText(MainActivity.this,responseString, Toast.LENGTH_SHORT).show();
                 searching_dialog.dismiss();
-                if (responseString.isEmpty()){
+                if (responseString.equals("failed")){
                     show_no_content();
                 }else{
                     myjsonData=responseString;
