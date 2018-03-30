@@ -37,6 +37,7 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.wang.avi.AVLoadingIndicatorView;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -232,53 +233,29 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
     public void ChangeNameDialog() {
-//        new LovelyTextInputDialog(this)
-//                .setTopColorRes(R.color.colorPrimary)
-//                .setTitle("Update your name")
-//                .setMessage("Please input your new name")
-//                .setIcon(R.drawable.ic_usr_dp)
-//                .setInputType(InputType.TYPE_CLASS_TEXT)
-//                .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
-//                    @Override
-//                    public void onTextInputConfirmed(String text) {
-//                        Toast.makeText(UserProfileActivity.this, text, Toast.LENGTH_SHORT).show();
-//                    }
-//                })
-//                .show();
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        final EditText edt = new EditText(this);
-        edt.setText(name.getText());
+        final LovelyTextInputDialog lovelyTextInputDialog=new LovelyTextInputDialog(this);
+        lovelyTextInputDialog.setTopColorRes(R.color.colorPrimary);
+        lovelyTextInputDialog.setTitle("Update your name");
+        lovelyTextInputDialog.setMessage("Please input your new name");
+        lovelyTextInputDialog.setIcon(R.drawable.ic_user);
+        lovelyTextInputDialog.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
         if (name.getText().equals("Add name")){
-            edt.setText("");
-
+            lovelyTextInputDialog.setInitialInput("");
+        }else{
+            lovelyTextInputDialog.setInitialInput(name.getText().toString());
         }
-
-        dialogBuilder.setTitle(Html.fromHtml("<font color='#000000'>Update name</font>"));
-        dialogBuilder.setMessage(Html.fromHtml("<font color='#000000'>Input your new name</font>"));
-        dialogBuilder.setCancelable(false);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.setNegativeButton("Cancel", null);
-        dialogBuilder.setView(edt);
-        edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        edt.setSelection(edt.getText().length());
-
-        final AlertDialog b = dialogBuilder.create();
-        b.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
+        lovelyTextInputDialog.setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
-                    public void onClick(View v) {
-                        String edt_name=edt.getText().toString();
-                        if (edt_name.isEmpty()){
-                            b.dismiss();
+                    public void onTextInputConfirmed(String text) {
+
+                        if (text.isEmpty()){
+                            lovelyTextInputDialog.dismiss();
                             new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Error")
                                     .setContentText("Username can't be empty!")
                                     .show();
-                        }else if(edt_name.equals(display_name)){
-                            b.dismiss();
+                        }else if(text.equals(display_name)){
+                            lovelyTextInputDialog.dismiss();
                             new SweetAlertDialog(UserProfileActivity.this)
                                     .setTitleText("No changes made")
                                     .show();
@@ -288,101 +265,69 @@ public class UserProfileActivity extends AppCompatActivity {
                             pDialog.setTitleText("Updating");
                             pDialog.setCancelable(false);
                             pDialog.show();
-                            name.setText(edt_name);
-                            UpdateName(edt_name);
-                            b.dismiss();
+                            name.setText(text);
+                            UpdateName(text);
+                            lovelyTextInputDialog.dismiss();
 
                         }
-
                     }
                 });
-            }
-        });
-        b.show();
+        lovelyTextInputDialog.setNegativeButton(android.R.string.cancel,null);
+        lovelyTextInputDialog.show();
     }
     public void ChangePhoneDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        final EditText edt = new EditText(this);
-        edt.setText(phone.getText());
+        final LovelyTextInputDialog lovelyTextInputDialog=new LovelyTextInputDialog(this);
+        lovelyTextInputDialog.setTopColorRes(R.color.colorPrimary);
+        lovelyTextInputDialog.setTitle("Update your Phone Number");
+        lovelyTextInputDialog.setMessage("Please input your new phone number");
+        lovelyTextInputDialog.setIcon(R.drawable.ic_call_black_24dp);
+        lovelyTextInputDialog.setInputType(InputType.TYPE_CLASS_PHONE);
         if (phone.getText().equals("Add mobile number")){
-            edt.setText("");
-
+            lovelyTextInputDialog.setInitialInput("");
+        }else{
+            lovelyTextInputDialog.setInitialInput(phone.getText().toString());
         }
-        edt.setInputType(InputType.TYPE_CLASS_PHONE);
-        edt.setSelection(edt.getText().length());
-
-        dialogBuilder.setTitle(Html.fromHtml("<font color='#000000'>Update name</font>"));
-        dialogBuilder.setMessage(Html.fromHtml("<font color='#000000'>Input your new phone number</font>"));
-        dialogBuilder.setCancelable(false);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.setNegativeButton("Cancel", null);
-        dialogBuilder.setView(edt);
-
-        final AlertDialog b = dialogBuilder.create();
-        b.setOnShowListener(new DialogInterface.OnShowListener() {
+        lovelyTextInputDialog.setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
             @Override
-            public void onShow(DialogInterface dialog) {
-                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String edt_phone=edt.getText().toString();
-
-                        b.dismiss();
-                        pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE);
-                        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-                        pDialog.setTitleText("Updating");
-                        pDialog.setCancelable(false);
-                        pDialog.show();
-                        UpdatePhone(edt_phone);
-
-                    }
-                });
+            public void onTextInputConfirmed(String text) {
+                lovelyTextInputDialog.dismiss();
+                pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                pDialog.setTitleText("Updating");
+                pDialog.setCancelable(false);
+                pDialog.show();
+                UpdatePhone(text);
             }
         });
-        b.show();
+        lovelyTextInputDialog.setNegativeButton(android.R.string.cancel,null);
+        lovelyTextInputDialog.show();
     }
     public void ChangeEmailDialog() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        final EditText edt = new EditText(this);
-        edt.setText(email.getText());
+        final LovelyTextInputDialog lovelyTextInputDialog=new LovelyTextInputDialog(this);
+        lovelyTextInputDialog.setTopColorRes(R.color.colorPrimary);
+        lovelyTextInputDialog.setTitle("Update your Email Address");
+        lovelyTextInputDialog.setMessage("Please Input your new email address");
+        lovelyTextInputDialog.setIcon(R.drawable.ic_email);
+        lovelyTextInputDialog.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         if (email.getText().equals("Add email address")){
-            edt.setText("");
-
+            lovelyTextInputDialog.setInitialInput("");
+        }else{
+            lovelyTextInputDialog.setInitialInput(email.getText().toString());
         }
-        edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        edt.setSelection(edt.getText().length());
-
-        dialogBuilder.setTitle(Html.fromHtml("<font color='#000000'>Update name</font>"));
-        dialogBuilder.setMessage(Html.fromHtml("<font color='#000000'>Input your new email address</font>"));
-        dialogBuilder.setCancelable(false);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.setNegativeButton("Cancel", null);
-        dialogBuilder.setView(edt);
-
-        final AlertDialog b = dialogBuilder.create();
-        b.setOnShowListener(new DialogInterface.OnShowListener() {
+        lovelyTextInputDialog.setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
             @Override
-            public void onShow(DialogInterface dialog) {
-                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String edt_email=edt.getText().toString();
-                        UpdateEmail(edt_email);
-                        b.dismiss();
-                        pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE);
-                        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-                        pDialog.setTitleText("Updating");
-                        pDialog.setCancelable(false);
-                        pDialog.show();
-
-
-                    }
-                });
+            public void onTextInputConfirmed(String text) {
+                UpdateEmail(text.trim().toLowerCase());
+                lovelyTextInputDialog.dismiss();
+                pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+                pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                pDialog.setTitleText("Updating");
+                pDialog.setCancelable(false);
+                pDialog.show();
             }
         });
-        b.show();
+        lovelyTextInputDialog.setNegativeButton(android.R.string.cancel,null);
+        lovelyTextInputDialog.show();
     }
     public void UpdateName(final String new_name){
         RequestParams params = new RequestParams();
