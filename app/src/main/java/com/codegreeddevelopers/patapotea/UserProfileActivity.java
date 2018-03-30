@@ -2,6 +2,7 @@ package com.codegreeddevelopers.patapotea;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -39,6 +41,7 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.msebera.android.httpclient.Header;
@@ -52,10 +55,11 @@ public class UserProfileActivity extends AppCompatActivity {
     SharedPreferences user_preferences,pickup_point_preferences;
     SweetAlertDialog pDialog,sDialog;
     SharedPreferences.Editor editor;
-    CardView logout;
+    ImageView logout;
     AlertDialog.Builder popDialog;
     AVLoadingIndicatorView avi;
     Uri resultUri;
+    Boolean cache_exixts=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,8 @@ public class UserProfileActivity extends AppCompatActivity {
         }else {
             user_type="normal_user";
         }
+
+
 
 
         //finding views
@@ -183,9 +189,15 @@ public class UserProfileActivity extends AppCompatActivity {
         }else{
             cached_profile_url = pickup_point_preferences.getString("cached_profile_url", null);
         }
-
-
         if (cached_profile_url != null){
+            File file=new File(URI.create(cached_profile_url));
+            if (file.exists()){
+                cache_exixts=true;
+            }
+        }
+
+
+        if (cached_profile_url != null && cache_exixts){
             profile.setImageURI(Uri.parse(cached_profile_url));
         }else{
             if (profile_url != null) {

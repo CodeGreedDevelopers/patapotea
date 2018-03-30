@@ -63,7 +63,10 @@ public class SignInActivity extends AppCompatActivity {
         signin_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetUserInfo();
+                if (validate()){
+                    GetUserInfo();
+                }
+
             }
         });
 
@@ -195,5 +198,18 @@ public class SignInActivity extends AppCompatActivity {
 
             }
         });
+    }
+    public boolean validate() {
+        boolean valid = true;
+        String _email = email.getText().toString();
+
+        if (_email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(_email).matches()) {
+            email.setError("enter a valid email address");
+            valid = false;
+        } else {
+            email.setError(null);
+        }
+
+        return valid;
     }
 }
