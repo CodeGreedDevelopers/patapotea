@@ -25,7 +25,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.msebera.android.httpclient.Header;
 
 public class SignInActivity extends AppCompatActivity {
-    String current_user,db_phone,db_id,db_name,db_response;
+    String current_user,db_phone,db_id,db_name,db_response,db_profile_url;
     LinearLayout signinback;
     TextView sign_up,email,password,signin_btn;
     String email_info,password_info,preference_email,db_email;
@@ -142,6 +142,7 @@ public class SignInActivity extends AppCompatActivity {
                         db_name=info.getString("name");
                         db_email=info.getString("email");
                         db_response=r_info.getString("response");
+                        db_profile_url=info.getString("profile_image");
 
                         if (db_response.equals("true")){
                             if (current_user.equals("normal_user")){
@@ -149,7 +150,11 @@ public class SignInActivity extends AppCompatActivity {
                                 editor.putString("email",db_email);
                                 editor.putString("phone",db_phone);
                                 editor.putString("name",db_name);
+                                editor.putString("profile_url",db_profile_url);
                                 editor.apply();
+
+                                //clear any pickup point preferences that exist
+                                pickup_point_preferences.edit().clear().apply();
                                 Intent it = new Intent(SignInActivity.this,MainActivity.class);
                                 startActivity(it);
                                 finish();
@@ -159,7 +164,11 @@ public class SignInActivity extends AppCompatActivity {
                                 editor.putString("email",db_email);
                                 editor.putString("phone",db_phone);
                                 editor.putString("name",db_name);
+                                editor.putString("profile_url",db_profile_url);
                                 editor.apply();
+
+                                //clear any normal user preferences that exist
+                                user_preferences.edit().clear().apply();
                                 Intent it = new Intent(SignInActivity.this,PickupMain.class);
                                 startActivity(it);
                                 finish();

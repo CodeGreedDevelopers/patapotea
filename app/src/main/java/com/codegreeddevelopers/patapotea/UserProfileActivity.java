@@ -27,22 +27,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.wang.avi.AVLoadingIndicatorView;
-import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import cz.msebera.android.httpclient.Header;
@@ -50,8 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserProfileActivity extends AppCompatActivity {
     TextView top_name,name,phone,email;
-    String display_name,display_email,preference_email,display_phone="",user_type,result;
-    Uri profile_url;
+    String display_name,display_email,preference_email,display_phone="",user_type,result,profile_url,cached_profile_url;
     CircleImageView profile;
     ImageView ic_edt_name,ic_edt_phone,ic_edt_email;
     SharedPreferences user_preferences,pickup_point_preferences;
@@ -133,10 +128,12 @@ public class UserProfileActivity extends AppCompatActivity {
             preference_email = user_preferences.getString("email", null);
             display_phone = user_preferences.getString("phone", null);
             display_name = user_preferences.getString("name", null);
+            profile_url = user_preferences.getString("profile_url", null);
         }else {
             preference_email = pickup_point_preferences.getString("email", null);
             display_phone = pickup_point_preferences.getString("phone", null);
             display_name = pickup_point_preferences.getString("name", null);
+            profile_url = user_preferences.getString("profile_url", null);
         }
 
         display_email = preference_email;
@@ -181,29 +178,45 @@ public class UserProfileActivity extends AppCompatActivity {
             email.setText(display_email);
 
         }
-//
-//
-//        if (profile_url != null) {
-//            Picasso
-//                    .with(getBaseContext())
-//                    .load(profile_url)
-//                    .transform(new CropCircleTransformation())
-//                    .resize(512, 512)
-//                    .centerCrop()
-//                    .placeholder(R.drawable.avatar)
-//                    .into(profile);
-//
-//        }else {
-//            Picasso
-//                    .with(getBaseContext())
-//                    .load(R.drawable.avatar)
-//                    .transform(new CropCircleTransformation())
-//                    .resize(512, 512)
-//                    .centerCrop()
-//                    .into(profile);
-//
-//            //Else It will display the default dp
-//        }
+        if(user_type=="normal_user"){
+            cached_profile_url = user_preferences.getString("cached_profile_url", null);
+        }else{
+            cached_profile_url = pickup_point_preferences.getString("cached_profile_url", null);
+        }
+
+
+        if (cached_profile_url != null){
+            profile.setImageURI(Uri.parse(cached_profile_url));
+        }else{
+            if (profile_url != null) {
+                if (profile_url.isEmpty()){
+                    Picasso
+                            .with(getBaseContext())
+                            .load(R.drawable.dp_placeholder)
+                            .resize(512, 512)
+                            .centerCrop()
+                            .into(profile);
+                }else{
+                    Picasso
+                            .with(getBaseContext())
+                            .load(profile_url)
+                            .resize(512, 512)
+                            .placeholder(R.drawable.dp_placeholder)
+                            .centerCrop()
+                            .into(profile);
+                }
+
+
+            }else {
+                Picasso
+                        .with(getBaseContext())
+                        .load(R.drawable.dp_placeholder)
+                        .resize(512, 512)
+                        .centerCrop()
+                        .into(profile);
+            }
+
+        }
 
     }
     public void ChangeNameDialog() {
@@ -558,7 +571,7 @@ public class UserProfileActivity extends AppCompatActivity {
             result = cursor.getString(idx);
             cursor.close();
         }
-        UploadItems(UserProfileActivity.this);
+        UpdateProfileImage(UserProfileActivity.this);
         return result;
     }
     @Override
@@ -568,10 +581,7 @@ public class UserProfileActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 resultUri = result.getUri();
-
                 new File(getRealPathFromURI(resultUri));
-                //Display the image before uploading
-//                profile.setImageURI(resultUri);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 result.getError();
@@ -579,7 +589,7 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
     }
-    public void UploadItems(final Context context){
+    public void UpdateProfileImage(final Context context){
         avi.smoothToShow();
         RequestParams params = new RequestParams();
         AsyncHttpClient client = new AsyncHttpClient();
@@ -598,6 +608,27 @@ public class UserProfileActivity extends AppCompatActivity {
                 avi.smoothToHide();
                 profile.setImageURI(resultUri);
 
+                try {
+                    //convert the byte response to string so as to get profile url
+                    String str = new String(bytes, "UTF-8");
+                    if (user_type.equals("normal_user")){
+                        cached_profile_url=resultUri.toString();
+                        //update profile url to pickup_point_preferences
+                        editor= user_preferences.edit();
+                        editor.putString("profile_url",str);
+                        editor.putString("cached_profile_url",cached_profile_url);
+                        editor.apply();
+                    }else {
+                        cached_profile_url=resultUri.toString();
+                        //update profile url to user_preferences
+                        editor= pickup_point_preferences.edit();
+                        editor.putString("profile_url",str);
+                        editor.putString("cached_profile_url",cached_profile_url);
+                        editor.apply();
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -614,7 +645,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         sDialog.dismissWithAnimation();
-                        UploadItems(context);
+                        UpdateProfileImage(context);
 
                     }
                 });
