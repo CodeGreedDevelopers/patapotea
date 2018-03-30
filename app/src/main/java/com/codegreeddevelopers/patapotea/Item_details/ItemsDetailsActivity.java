@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.InputType;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ceylonlabs.imageviewpopup.ImagePopup;
+import com.codegreeddevelopers.patapotea.CheckOut.CheckOutActivity;
 import com.codegreeddevelopers.patapotea.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,6 +39,7 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.squareup.picasso.Picasso;
+import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +54,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
     TextView txtheading, textview1, item_number, item_name, date_found, pickup_loc,pickupfee;
     LinearLayout claim_button;
     GoogleMap mMap;
-    String data,img;
+    String data,img,pay_ment;
     SweetAlertDialog fetching_dialog;
     private static final int PERMISSION_LOCATION_REQUEST_CODE = 0;
     AlertDialog.Builder popDialog;
@@ -209,6 +212,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
                     date_found.setText(jsonObject.get("dateFound").toString());
                     pickup_loc.setText(jsonObject.get("physical_address").toString());
                     pickupfee.setText("Ksh."+jsonObject.get("item_price").toString());
+                    pay_ment=jsonObject.get("item_price").toString();
                     img=jsonObject.get("item_image").toString();
 
                     if (jsonObject.get("loc_lat").toString().equals(null)) {
@@ -271,8 +275,19 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
                     JSONArray jsonArray = new JSONArray(responseString);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     if (jsonObject.get("payment_status").toString().equals("NOT")) {
-                        new SweetAlertDialog(ItemsDetailsActivity.this, SweetAlertDialog.NORMAL_TYPE)
-                                .setContentText("Please send Your PickUp Fee to +254724487464")
+                        new LovelyTextInputDialog(ItemsDetailsActivity.this)
+                                .setTopColorRes(R.color.colorPrimary)
+                                .setTitle("Item Payment")
+                                .setMessage("Please go to MPESA Pay Ksh."+pay_ment+"\nTo Till No: 719251\n Enter The Confirmation Code below")
+                                .setHint("Mpesa Confirmation code")
+                                .setIcon(R.drawable.ic_info)
+                                .setInputType(InputType.TYPE_CLASS_TEXT)
+                                .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
+                                    @Override
+                                    public void onTextInputConfirmed(String text) {
+                                        get_item_data(text);
+                                    }
+                                })
                                 .show();
                     } else {
                         new SweetAlertDialog(ItemsDetailsActivity.this, SweetAlertDialog.NORMAL_TYPE)
@@ -308,6 +323,55 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
         imagePopup.setBackground(getResources().getDrawable(R.drawable.item_diaplay_placeholder));
         imagePopup.initiatePopupWithPicasso("http://"+img);
         imagePopup.viewPopup();
+    }
+
+    public void get_item_data(final String conf_code){
+        fetching_dialog.show();
+        AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
+        RequestParams params=new RequestParams();
+        params.put("mpesa_code",conf_code.toUpperCase());
+        params.put("item_id",data);
+
+        asyncHttpClient.post("http://www.duma.co.ke/patapotea/confirm_payment.php", params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                fetching_dialog.dismiss();
+                new SweetAlertDialog(ItemsDetailsActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error!")
+                        .setContentText("Something went wrong.")
+                        .setCancelText("Cancel")
+                        .setConfirmText("Retry")
+                        .showCancelButton(true)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                get_item_data(conf_code);
+                                sweetAlertDialog.dismiss();
+                            }
+                        })
+                        .show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                fetching_dialog.dismiss();
+                if (responseString.equalsIgnoreCase("NOT_FOUND")){
+                    new SweetAlertDialog(ItemsDetailsActivity.this, SweetAlertDialog.NORMAL_TYPE)
+                            .setContentText("Your MPESA Confirmation code "+conf_code.toUpperCase()+" does not exist or is already used Up")
+                            .show();
+                }else if (responseString.equalsIgnoreCase("NOT_ENOUGH")){
+                    new SweetAlertDialog(ItemsDetailsActivity.this, SweetAlertDialog.NORMAL_TYPE)
+                            .setContentText("Dear Customer The Amount paid id not sufficient.\nPlease top it up.")
+                            .show();
+                }else{
+                    new SweetAlertDialog(ItemsDetailsActivity.this, SweetAlertDialog.NORMAL_TYPE)
+                            .setContentText("Your Pick Up Pin is: \n" +responseString)
+                            .show();
+                }
+
+            }
+        });
+
     }
 
 }
