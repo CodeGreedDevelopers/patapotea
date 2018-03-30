@@ -54,7 +54,8 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
     TextView txtheading, textview1, item_number, item_name, date_found, pickup_loc,pickupfee;
     LinearLayout claim_button;
     GoogleMap mMap;
-    String data,img,pay_ment;
+    String data,img;
+    Double pay_ment;
     SweetAlertDialog fetching_dialog;
     private static final int PERMISSION_LOCATION_REQUEST_CODE = 0;
     AlertDialog.Builder popDialog;
@@ -211,8 +212,8 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
                     txtheading.setText(jsonObject.get("item_type").toString());
                     date_found.setText(jsonObject.get("dateFound").toString());
                     pickup_loc.setText(jsonObject.get("physical_address").toString());
-                    pickupfee.setText("Ksh."+jsonObject.get("item_price").toString());
-                    pay_ment=jsonObject.get("item_price").toString();
+                    pay_ment=Double.parseDouble(jsonObject.get("item_price").toString())-Double.parseDouble(jsonObject.get("item_paid_change").toString());
+                    pickupfee.setText("Ksh."+pay_ment);
                     img=jsonObject.get("item_image").toString();
 
                     if (jsonObject.get("loc_lat").toString().equals(null)) {
@@ -280,7 +281,7 @@ public class ItemsDetailsActivity extends AppCompatActivity implements OnMapRead
                                 .setTitle("Item Payment")
                                 .setMessage("Please go to MPESA Pay Ksh."+pay_ment+"\nTo Till No: 719251\n Enter The Confirmation Code below")
                                 .setHint("Mpesa Confirmation code")
-                                .setIcon(R.drawable.ic_info)
+                                .setIcon(R.drawable.ic_money_icon)
                                 .setInputType(InputType.TYPE_CLASS_TEXT)
                                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                                     @Override

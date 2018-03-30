@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         suggestions_list = new ArrayList<>();
-        suggestions_list.add(new Suggestion("Manyasa"));
+        //suggestions_list.add(new Suggestion("Manyasa"));
 
         items_List=findViewById(R.id.items_list);
         mSearchView=findViewById(R.id.floating_search_view);
@@ -288,16 +289,53 @@ public class MainActivity extends AppCompatActivity {
             for (int x=0;x<jsonArray.length();x++){
                 JSONObject jsonObject=jsonArray.getJSONObject(x);
                 if (jsonObject.get("item_type").toString().toLowerCase().contains(query)){
-                    suggestions_list.add(new Suggestion(jsonObject.get("item_type").toString()));
-                }else if(jsonObject.get("item_number").toString().toLowerCase().contains(query)){
-                    suggestions_list.add(new Suggestion(jsonObject.get("item_number").toString()));
-                }else if(jsonObject.get("item_name").toString().toLowerCase().contains(query)){
-                    suggestions_list.add(new Suggestion(jsonObject.get("item_name").toString()));
+                    search_if_item_exist(jsonObject.get("item_type").toString());
+                }
+
+                if(jsonObject.get("item_number").toString().toLowerCase().contains(query)){
+                    search_if_item_exist(jsonObject.get("item_number").toString());
+                    //suggestions_list.add(new Suggestion(jsonObject.get("item_number").toString()));
+                }
+
+                if(jsonObject.get("item_name").toString().toLowerCase().contains(query)){
+                    search_if_item_exist(jsonObject.get("item_name").toString());
+                    //suggestions_list.add(new Suggestion(jsonObject.get("item_name").toString()));
+
                 }
 
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void search_if_item_exist(String item_name){
+        //suggestions_list.clear();
+        if (suggestions_list.size()==0){
+
+            suggestions_list.add(new Suggestion(item_name));
+            Toast.makeText(this, "Adding"+suggestions_list.size(), Toast.LENGTH_SHORT).show();
+        }else{
+            //try {
+                int count=suggestions_list.size();
+                //Toast.makeText(this, ""+count, Toast.LENGTH_SHORT).show();
+                for (int i=0;i<count;i++) {
+                    //suggestions_list.notify();
+                    String s1= new String(suggestions_list.get(i).getBody().toString().toLowerCase().trim().toCharArray());
+                    String s2= new String(item_name.toLowerCase().trim().toCharArray());
+                    if (Arrays.equals(s1.toCharArray(),s2.toCharArray())) {
+                        return;
+                    } else {
+                        //Toast.makeText(this, s1+" does not match "+s2, Toast.LENGTH_SHORT).show();
+                        suggestions_list.add(new Suggestion(item_name));
+                        continue;
+                    }
+                }
+//            }catch (Exception e){
+//                Toast.makeText(this, ""+e, Toast.LENGTH_SHORT).show();
+//                e.printStackTrace();
+//            }
+        }
+
     }
 }
