@@ -137,21 +137,21 @@
 
                 />
 
+            <customfonts.MyTextView
+                android:id="@+id/sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Don't have an account?"
+                android:textSize="16sp"
+                android:textColor="#c4c5c9"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:paddingBottom="5dp"
+                android:layout_marginBottom="20dp"
+                />
+
         </LinearLayout>
 
-        <customfonts.MyTextView
-            android:id="@+id/sign_up"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Don't have an account?"
-            android:textSize="16sp"
-            android:textColor="#c4c5c9"
-            android:visibility="gone"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="5dp"
-            android:layout_marginBottom="20dp"
-            />
 
 
     </RelativeLayout>

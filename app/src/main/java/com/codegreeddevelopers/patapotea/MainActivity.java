@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
         if (suggestions_list.size()==0){
 
             suggestions_list.add(new Suggestion(item_name));
-            Toast.makeText(this, "Adding"+suggestions_list.size(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Adding"+suggestions_list.size(), Toast.LENGTH_SHORT).show();
         }else{
             //try {
                 int count=suggestions_list.size();
