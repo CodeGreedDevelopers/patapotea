@@ -198,7 +198,7 @@ public class UserProfileActivity extends AppCompatActivity {
         }
 
 
-        if (cached_profile_url != null && cache_exixts){
+        if (cached_profile_url != null){
             profile.setImageURI(Uri.parse(cached_profile_url));
         }else{
             if (profile_url != null) {
