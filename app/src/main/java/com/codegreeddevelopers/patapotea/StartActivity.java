@@ -33,6 +33,7 @@ public class StartActivity extends AppCompatActivity {
                 if (preference_email!=null){
                     Intent intent = new Intent(StartActivity.this,MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }else{
                     Intent intent=new Intent(StartActivity.this,SignInActivity.class);
                     intent.putExtra("current_user", "normal_user");
@@ -51,6 +52,7 @@ public class StartActivity extends AppCompatActivity {
                 if (p_preference_email!=null) {
                     Intent intent = new Intent(StartActivity.this,PickupMain.class);
                     startActivity(intent);
+                    finish();
                 }else {
                     Intent intent = new Intent(StartActivity.this, SignInActivity.class);
                     intent.putExtra("current_user", "pickup_point");
