@@ -70,9 +70,9 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        //show signup for normal users
-        if (current_user.equals("normal_user")){
-            sign_up.setVisibility(View.VISIBLE);
+        //hide sign_up for pickup point
+        if (current_user.equals("pickup_point")){
+            sign_up.setVisibility(View.GONE);
         }
 
         sign_up.setOnClickListener(new View.OnClickListener() {

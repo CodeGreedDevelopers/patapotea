@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="33dp"
-            android:text="Item name:"
+            android:text="Person Name On Item:"
             android:textColor="#338df8"
             android:textSize="14sp"
             android:layout_marginStart="30dp" />

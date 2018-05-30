@@ -5,32 +5,26 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.codegreeddevelopers.patapotea.Item_details.ItemsDetailsActivity;
 import com.codegreeddevelopers.patapotea.ListViewData.DataGetter;
 import com.codegreeddevelopers.patapotea.ListViewData.ItemsListAdapter;
 import com.codegreeddevelopers.patapotea.ListViewData.Suggestion;
 import com.codegreeddevelopers.patapotea.MapActivity.MapActivity;
-import com.codegreeddevelopers.patapotea.PicupPoint.PickupMain;
 import com.gturedi.views.StatefulLayout;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     List<Suggestion> suggestions_list;
     SweetAlertDialog searching_dialog;
     String myjsonData="",all_items="";
+    AsyncHttpClient  httpClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         suggestions_list = new ArrayList<>();
         //suggestions_list.add(new Suggestion("Manyasa"));
 
+
+        //async httpclient initialization
+        httpClient=new AsyncHttpClient();
         items_List=findViewById(R.id.items_list);
         mSearchView=findViewById(R.id.floating_search_view);
         dynamicBox=new DynamicBox(MainActivity.this,items_List);
@@ -86,14 +84,14 @@ public class MainActivity extends AppCompatActivity {
         itemsListAdapter=new ItemsListAdapter(MainActivity.this,0,array_of_data);
 
 
-        if (conection_status()){
+        if (connection_status()){
             get_list_items_online();
         }else{
             dynamicBox.showExceptionLayout();
             dynamicBox.setClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (conection_status()){
+                    if (connection_status()){
                         get_list_items_online();
                     }else{
                         dynamicBox.showExceptionLayout();
@@ -109,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
                 mSearchView.hideProgress();
-                search_data_online(searchSuggestion.getBody());
+                search_data_online(searchSuggestion.getBody().toString().trim());
                 mSearchView.clearSearchFocus();
             }
 
@@ -154,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 }else if (id == R.id.action_share){
                     Intent share=new Intent(Intent.ACTION_SEND);
                     share.setType("text/plain");
-                    share.putExtra(Intent.EXTRA_TEXT,"Search For your Lost Documents such as ID card,Passports and ATM card using This Free Android App https://play.google.com/store/apps/details?id=com.codegreeddevelopers.patapotea");
+                    share.putExtra(Intent.EXTRA_TEXT,"Search For your Lost Documents such as ID card,Passports and ATM card using This Free Android App https://play.google.com/store/apps/details?id=com.codegreed_devs.patapotea");
                     startActivity(Intent.createChooser(share,"Share Using"));
                 }else if(id == R.id.action_about){
                     Intent intent2=new Intent(MainActivity.this, About.class);
@@ -171,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
         dynamicBox.addCustomView(customView,"greenmonster");
         dynamicBox.showCustomView("greenmonster");
         //Toast.makeText(this, "starting", Toast.LENGTH_SHORT).show();
-        AsyncHttpClient  httpClient=new AsyncHttpClient();
         httpClient.get("http://www.duma.co.ke/patapotea/items_data_getter.php", new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -180,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 dynamicBox.setClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (conection_status()){
+                        if (connection_status()){
                             get_list_items_online();
                         }else{
                             dynamicBox.showExceptionLayout();
@@ -230,19 +227,18 @@ public class MainActivity extends AppCompatActivity {
     //searching data online
     public void search_data_online(String query){
         searching_dialog.show();
-        AsyncHttpClient asyncHttpClient=new AsyncHttpClient();
         RequestParams params=new RequestParams();
-        params.put("query",query);
-        asyncHttpClient.post("http://www.duma.co.ke/patapotea/search_items.php", params, new TextHttpResponseHandler() {
+        params.put("query",query.toLowerCase());
+        httpClient.post("http://www.duma.co.ke/patapotea/search_items.php", params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                searching_dialog.show();
-                Toast.makeText(MainActivity.this, "An Error Occurred", Toast.LENGTH_SHORT).show();
+                searching_dialog.dismiss();
+                Toast.makeText(MainActivity.this, "An Error Occurred"+responseString, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                //Toast.makeText(MainActivity.this,responseString, Toast.LENGTH_SHORT).show();
+                Log.e("Response :",responseString);
                 searching_dialog.dismiss();
                 if (responseString.trim().equals("failed")){
                     show_no_content();
@@ -251,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
                     itemsListAdapter.clear();
                     try {
                         JSONArray items_array=new JSONArray(responseString);
+                        Log.e("Search Item Count : ",""+items_array.length());
                         ArrayList<DataGetter> dataGetters=DataGetter.fromJson(items_array);
                         itemsListAdapter.addAll(dataGetters);
                     } catch (JSONException e) {
@@ -264,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         items_List.setAdapter(itemsListAdapter);
     }
 
-    public Boolean conection_status(){
+    public Boolean connection_status(){
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                 connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {

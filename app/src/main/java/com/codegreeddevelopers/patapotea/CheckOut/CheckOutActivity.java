@@ -34,7 +34,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class CheckOutActivity extends AppCompatActivity {
     ImageView img_logo, logo_botswana, backArrow, img_share,img_share1, backArrow1,background_img;
-    TextView txtheading, textview1,item_number,item_name,date_found;
+    TextView txtheading, textview1,item_number,item_name,date_found,payment_status;
     LinearLayout checkout_button;
     String data;
     SweetAlertDialog fetching_dialog;
@@ -69,6 +69,7 @@ public class CheckOutActivity extends AppCompatActivity {
         backArrow =  findViewById(R.id.pbackArrow);
         backArrow1 =  findViewById(R.id.pbackArrow1);
         txtheading =  findViewById(R.id.ptxtheading);
+        payment_status = findViewById(R.id.payment_status);
 
         fetch_data_online(data);
 
@@ -161,6 +162,7 @@ public class CheckOutActivity extends AppCompatActivity {
                     item_name.setText(jsonObject.get("item_name").toString());
                     item_number.setText(jsonObject.get("item_number").toString());
                     txtheading.setText(jsonObject.get("item_type").toString());
+                    payment_status.setText(jsonObject.get("payment_status").toString());
                     date_found.setText(jsonObject.get("dateFound").toString());
                     //Picasso.with(ItemsDetailsActivity.this).load(R.drawable.item_diaplay_placeholder).placeholder(R.drawable.item_diaplay_placeholder).into(background_img);
 

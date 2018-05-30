@@ -67,7 +67,7 @@ public class PickupMain extends AppCompatActivity {
         dynamicBox=new DynamicBox(PickupMain.this,pickup_items_List);
         statefulLayout=findViewById(R.id.stateful);
 
-
+        //Toast.makeText(this, "Email:"+preference_email, Toast.LENGTH_SHORT).show();
 
         //show the loading box
         View customView = getLayoutInflater().inflate(R.layout.loading_activity, pickup_items_List, false);
@@ -247,7 +247,7 @@ public class PickupMain extends AppCompatActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                //Toast.makeText(MainActivity.this,responseString, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PickupMain.this,responseString, Toast.LENGTH_SHORT).show();
                 searching_dialog.dismiss();
                 if (responseString.equals("failed")){
                     show_no_content();
