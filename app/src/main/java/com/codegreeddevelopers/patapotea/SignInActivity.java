@@ -27,7 +27,7 @@ import cz.msebera.android.httpclient.Header;
 public class SignInActivity extends AppCompatActivity {
     String current_user,db_phone,db_id,db_name,db_response,db_profile_url;
     LinearLayout signinback;
-    TextView sign_up,email,password,signin_btn;
+    TextView sign_up,email,password,signin_btn,forgot_pass;
     String email_info,password_info,preference_email,db_email;
     SweetAlertDialog pDialog;
     SharedPreferences user_preferences,pickup_point_preferences;
@@ -43,7 +43,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         //receiving the type of user from StartActivity
-        Bundle bundle = getIntent().getExtras();
+        final Bundle bundle = getIntent().getExtras();
         current_user=bundle.getString("current_user");
 
         signinback = findViewById(R.id.signinback);
@@ -51,6 +51,7 @@ public class SignInActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         signin_btn = findViewById(R.id.signin_btn);
+        forgot_pass = findViewById(R.id.forgot_password);
 
         signinback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +81,18 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SignInActivity.this,SignUpActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        forgot_pass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("current_user",current_user);
+                Intent intent = new Intent(SignInActivity.this,SearchAccount.class);
+                intent.putExtras(bundle1);
+                startActivity(intent);
+                finish();
             }
         });
     }

@@ -17,7 +17,7 @@
             android:id="@+id/signin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="proceed as"
+            android:text=""
             android:textSize="22sp"
             android:textColor="#ADCCE2"
             android:gravity="left"

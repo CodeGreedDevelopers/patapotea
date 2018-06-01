@@ -63,6 +63,8 @@
             android:parentActivityName=".PicupPoint.PickupMain">
 
         </activity>
+        <activity android:name=".SearchAccount"
+            android:parentActivityName=".SignInActivity"/>
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">

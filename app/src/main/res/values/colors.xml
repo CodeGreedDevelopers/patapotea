@@ -2,12 +2,14 @@
 <resources>
     <color name="colorPrimary">#40b922</color>
     <color name="colorPrimaryDark">#32af13</color>
+    <color name="splashColor">#277110</color>
     <color name="colorAccent">#f158b940</color>
 
     <color name="greenLight">#f176b667</color>
 
     <color name="white">#fff</color>
     <color name="transparent_">#1d6a35</color>
+    <color name="translucent">#748f9694</color>
 
     <!--Chat Type Tab Color-->
     <color name="green">#4fc631</color>
